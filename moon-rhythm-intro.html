@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 月亮節奏 Moon Rhythm</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #07070C;
+    --surface: #0E0E18;
+    --border: #1a1a2e;
+    --text: #d4d0c8;
+    --text-dim: #6b6878;
+    --menstrual: #8B1A1A;
+    --follicular: #D4A017;
+    --ovulation: #FF6B6B;
+    --luteal: #7B68AE;
+    --safe: #4A9E8E;
+    --accent: #D4A017;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans TC', 'Crimson Text', Georgia, serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212,160,23,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .moon-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  h1 {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: clamp(36px, 7vw, 64px);
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .tagline {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: clamp(16px, 3vw, 22px);
+    font-style: italic;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .tagline-en {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: clamp(14px, 2.5vw, 18px);
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, var(--accent), #B8860B);
+    color: #0A0A0F;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 24px rgba(212,160,23,0.2);
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(212,160,23,0.35);
+  }
+
+  .cta-sub {
+    margin-top: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-title {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--accent);
+    margin-top: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  .intro-text-en {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    line-height: 1.8;
+    font-family: 'Crimson Text', Georgia, serif;
+  }
+
+  .phase-strip {
+    display: flex;
+    gap: 4px;
+    margin: 40px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 48px;
+  }
+
+  .phase-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: #fff;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  @media (min-width: 540px) {
+    .features-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon { font-size: 24px; margin-bottom: 8px; }
+
+  .feature-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .feature-title-en {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 8px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .privacy-box {
+    background: var(--surface);
+    border: 1px solid var(--safe);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 32px 0;
+  }
+
+  .privacy-box h3 {
+    color: var(--safe);
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .privacy-box p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .install-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .install-section h3 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .install-steps {
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .install-steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .install-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 22px;
+    height: 22px;
+    background: var(--border);
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+  }
+
+  .install-steps a { color: var(--accent); text-decoration: none; }
+
+  .warning-note {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(255,107,107,0.08);
+    border-left: 3px solid var(--ovulation);
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: var(--ovulation);
+  }
+
+  .moon-divider {
+    text-align: center;
+    padding: 32px 0;
+    font-size: 18px;
+    letter-spacing: 12px;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-cta {
+    display: inline-block;
+    padding: 14px 40px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s;
+    margin-bottom: 24px;
+  }
+
+  .footer-cta:hover {
+    background: var(--accent);
+    color: #0A0A0F;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .footer-meta a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="moon-icon">🌙</div>
+  <h1>月亮節奏</h1>
+  <div class="tagline">你的身體，有自己的月亮。</div>
+  <div class="tagline-en">Your body has its own moon.</div>
+  <a href="https://moon-rhythm-tracker.vercel.app" class="cta-btn" target="_blank">立即使用 USE NOW</a>
+  <div class="cta-sub">免費 · 免註冊 · 免下載 &nbsp;|&nbsp; Free · No sign-up · No download</div>
+</div>
+
+<section>
+  <div class="section-title">這是什麼</div>
+  <div class="section-subtitle">What is Moon Rhythm?</div>
+  <p class="intro-text"><strong>月亮節奏</strong>是一款整合月經週期、間歇性斷食、與安全期／受孕期追蹤的個人化健康工具。不只是記錄經期——它根據你的週期階段，動態調整斷食建議、標示安全與危險期、顯示真實月相，讓你一眼掌握身體節奏。</p>
+  <p class="intro-text-en"><strong>Moon Rhythm</strong> is a personalized health tool that integrates menstrual cycle tracking, intermittent fasting guidance, and fertility/safe period awareness — all in one beautiful interface. It dynamically adjusts fasting recommendations based on your cycle phase, marks fertile and safe windows, and displays real lunar phases so you can see your body's rhythm alongside nature's.</p>
+  <div class="phase-strip">
+    <div class="phase-bar" style="background:var(--menstrual);flex:1.5">🌑 月經</div>
+    <div class="phase-bar" style="background:var(--follicular);flex:2">🔥 濾泡</div>
+    <div class="phase-bar" style="background:var(--ovulation);flex:1">🌕 排卵</div>
+    <div class="phase-bar" style="background:var(--luteal);flex:2">🌖 黃體</div>
+    <div class="phase-bar" style="background:var(--safe);flex:1">🌙 安全</div>
+  </div>
+</section>
+
+<div class="moon-divider">🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘</div>
+
+<section>
+  <div class="section-title">核心功能</div>
+  <div class="section-subtitle">Key Features</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <div class="feature-title">週期追蹤</div>
+      <div class="feature-title-en">Cycle Tracking</div>
+      <div class="feature-desc">輸入月經第一天，自動計算排卵日、危險期、安全期。<br>Enter your period start date — ovulation, fertile window, and safe days calculated automatically.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱️</div>
+      <div class="feature-title">智慧斷食建議</div>
+      <div class="feature-title-en">Smart Fasting Advice</div>
+      <div class="feature-desc">經期 12-14h・濾泡期可達 72h・排卵期停長斷食・黃體期溫和斷食。<br>Phase-based recommendations, automatically adjusted for each stage.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌕</div>
+      <div class="feature-title">真實月相</div>
+      <div class="feature-title-en">Real Moon Phases</div>
+      <div class="feature-desc">日曆上的月亮 emoji 對應天空中真正的月相，觀察身體與自然的同步。<br>Calendar emojis reflect the actual moon — observe how your cycle syncs with the lunar cycle.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">目標自訂</div>
+      <div class="feature-title-en">Flexible Goals</div>
+      <div class="feature-desc">斷食優化、避孕、備孕可複選組合，介面自動調整。<br>Combine goals — Fasting + Contraception or Fasting + Conception. The interface adapts.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">斷食記錄與統計</div>
+      <div class="feature-title-en">Fasting Log & Stats</div>
+      <div class="feature-desc">每日記錄斷食時數，查看週／月統計、完成率、趨勢圖。<br>Record daily fasting hours, view stats, completion rate, and trend charts.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌡️</div>
+      <div class="feature-title">BBT 與分泌物追蹤</div>
+      <div class="feature-title-en">BBT & Cervical Mucus</div>
+      <div class="feature-desc">輸入基礎體溫和分泌物狀態，動態修正排卵日預測。<br>Input BBT and mucus observations to dynamically refine ovulation predictions.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗓️</div>
+      <div class="feature-title">行事曆匯出</div>
+      <div class="feature-title-en">Calendar Export</div>
+      <div class="feature-desc">一鍵匯出 .ics，加入 Google Calendar 或 Apple 行事曆。<br>One-tap .ics export to Google Calendar or Apple Calendar.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-title">中／EN 雙語</div>
+      <div class="feature-title-en">Bilingual Interface</div>
+      <div class="feature-desc">完整中英文介面，右上角一鍵切換。<br>Full Chinese and English interface, switchable with one tap.</div>
+    </div>
+  </div>
+
+  <div class="privacy-box">
+    <h3>🔒 隱私承諾 / Privacy Promise</h3>
+    <p>所有資料 100% 儲存在你的裝置上。不需要註冊，不收集任何個人數據。你的身體數據只屬於你。<br><br>100% of your data is stored locally on your device. No registration, no data collection. Your body data belongs to you and only you.</p>
+  </div>
+</section>
+
+<div class="moon-divider">🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘</div>
+
+<section>
+  <div class="section-title">📱 加到手機桌面</div>
+  <div class="section-subtitle">How to Add to Your Home Screen</div>
+
+  <div class="install-section">
+    <h3>iPhone（Safari）</h3>
+    <ol class="install-steps">
+      <li>用 Safari 開啟 <a href="https://moon-rhythm-tracker.vercel.app" target="_blank">moon-rhythm-tracker.vercel.app</a><br><span style="color:var(--text-dim);font-size:12px">Open the link in Safari</span></li>
+      <li>點底部的「分享」按鈕（⬆️ 方框加向上箭頭）<br><span style="color:var(--text-dim);font-size:12px">Tap the Share button at the bottom (⬆️ square with arrow)</span></li>
+      <li>往下滑，點「加入主畫面」<br><span style="color:var(--text-dim);font-size:12px">Scroll down, tap "Add to Home Screen"</span></li>
+      <li>點「新增」—— 完成！<br><span style="color:var(--text-dim);font-size:12px">Tap "Add" — done!</span></li>
+    </ol>
+    <div class="warning-note">⚠️ iPhone 請務必用 Safari 開啟。Chrome 或 LINE 內建瀏覽器無法使用此功能。<br><span style="opacity:0.8">You must use Safari on iPhone. Chrome or in-app browsers won't work.</span></div>
+  </div>
+
+  <div class="install-section">
+    <h3>Android（Chrome）</h3>
+    <ol class="install-steps">
+      <li>用 Chrome 開啟 <a href="https://moon-rhythm-tracker.vercel.app" target="_blank">moon-rhythm-tracker.vercel.app</a><br><span style="color:var(--text-dim);font-size:12px">Open the link in Chrome</span></li>
+      <li>點右上角三個點 ⋮<br><span style="color:var(--text-dim);font-size:12px">Tap the three dots ⋮ in the top right</span></li>
+      <li>點「加到主畫面」或「安裝應用程式」<br><span style="color:var(--text-dim);font-size:12px">Tap "Add to Home Screen" or "Install App"</span></li>
+      <li>確認 —— 完成！<br><span style="color:var(--text-dim);font-size:12px">Confirm — done!</span></li>
+    </ol>
+  </div>
+</section>
+
+<div class="footer">
+  <a href="https://moon-rhythm-tracker.vercel.app" class="footer-cta" target="_blank">🌙 立即使用 TRY NOW</a>
+  <div class="footer-meta">
+    免費 · 免註冊 · 免下載 · 你的資料只在你的手機上<br>
+    Free · No sign-up · No download · Your data stays on your device<br><br>
+    Built with 🌙 by <a href="https://itrunsitruns.github.io/syntax-field-archive/" target="_blank">Ööna</a> & Claude<br>
+    從構想到上線不到 3 小時 · From concept to launch in under 3 hours
+  </div>
+</div>
+
+</body>
+</html>
