@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌙 Moonyou 你的月亮</title>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -66,11 +66,18 @@
 
   h1 {
     font-family: 'Crimson Text', Georgia, serif;
-    font-size: clamp(36px, 7vw, 64px);
+    font-size: clamp(28px, 5vw, 48px);
     font-weight: 600;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     color: #fff;
     margin-bottom: 8px;
+    white-space: nowrap;
+  }
+
+  h1 .moonyou {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
   }
 
   .tagline {
@@ -358,7 +365,7 @@
 
 <div class="hero">
   <div class="moon-icon">🌙</div>
-  <h1>Moonyou 你的月亮</h1>
+  <h1><span class="moonyou">Moonyou</span> 你的月亮</h1>
   <div class="tagline">你的身體，有自己的月亮。</div>
   <div class="tagline-en">Your body has its own moon.</div>
   <a href="https://moonyou.vercel.app" class="cta-btn" target="_blank">立即使用 USE NOW</a>
