@@ -1,16 +1,14 @@
 // IT RUNS — service worker
 // Bump CACHE on every deploy you want users to hard-refresh to.
-const CACHE = 'it-runs-v3';
-const SCOPE_URL = new URL('./', self.location).pathname; // '/co-creation/it-runs/'
+const CACHE = 'it-runs-v4';
+const SCOPE_URL = new URL('./', self.location).pathname;
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './it-runs-dashboard-green.jsx',
-  './icon.svg',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-512-maskable.png'
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -31,7 +29,6 @@ self.addEventListener('activate', (e) => {
 
 // Strategy:
 //   - navigate requests  -> network-first, fall back to cached index.html
-//     (mirrors MoonYou's workbox NavigationRoute behaviour)
 //   - .jsx                -> network-first, fall back to cache (fast iteration)
 //   - everything else     -> cache-first, fall back to network
 self.addEventListener('fetch', (e) => {
@@ -39,7 +36,6 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Navigation fallback — any HTML page load within scope serves index.html offline.
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
