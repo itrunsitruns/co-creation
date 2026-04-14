@@ -1,6 +1,7 @@
 // IT RUNS — service worker
 // Bump CACHE on every deploy you want users to hard-refresh to.
-const CACHE = 'it-runs-v2';
+const CACHE = 'it-runs-v3';
+const SCOPE_URL = new URL('./', self.location).pathname; // '/co-creation/it-runs/'
 const ASSETS = [
   './',
   './index.html',
@@ -28,26 +29,46 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-// Network-first for the JSX (so edits show up fast), cache-first for the rest.
+// Strategy:
+//   - navigate requests  -> network-first, fall back to cached index.html
+//     (mirrors MoonYou's workbox NavigationRoute behaviour)
+//   - .jsx                -> network-first, fall back to cache (fast iteration)
+//   - everything else     -> cache-first, fall back to network
 self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-  const sameOrigin = url.origin === self.location.origin;
-  if (!sameOrigin) return;
+  const req = e.request;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
 
-  if (url.pathname.endsWith('.jsx') || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/')) {
+  // Navigation fallback — any HTML page load within scope serves index.html offline.
+  if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(e.request)
+      fetch(req)
         .then((r) => {
           const copy = r.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy));
+          caches.open(CACHE).then((c) => c.put(SCOPE_URL + 'index.html', copy));
           return r;
         })
-        .catch(() => caches.match(e.request))
+        .catch(() =>
+          caches.match(SCOPE_URL + 'index.html').then((r) => r || caches.match('./'))
+        )
+    );
+    return;
+  }
+
+  if (url.pathname.endsWith('.jsx')) {
+    e.respondWith(
+      fetch(req)
+        .then((r) => {
+          const copy = r.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+          return r;
+        })
+        .catch(() => caches.match(req))
     );
     return;
   }
 
   e.respondWith(
-    caches.match(e.request).then((r) => r || fetch(e.request))
+    caches.match(req).then((r) => r || fetch(req))
   );
 });
