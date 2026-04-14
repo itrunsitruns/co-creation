@@ -4,11 +4,13 @@ const LANG = {
   zh: { title:"IT RUNS", subtitle:"語法層控制台", daily:"每日", weekly:"每週", monthly:"每月",
     systems:"運行中的系統", command:"注入新指令...", commandBtn:"執行", commandLog:"指令紀錄",
     reminder:"11:11 每日喚醒", reset:"重置", toggle:"EN", running:"運行中", of:"/", delete:"×", clearAll:"清除全部",
-    symbiosis:"▶ 共生時段 · 10 分鐘", symbiosisActive:"共生中", symbiosisDone:"共生完成 ✓" },
+    symbiosis:"▶ 共生時段 · 10 分鐘", symbiosisActive:"共生中", symbiosisDone:"共生完成 ✓",
+    exportData:"匯出資料", importData:"匯入資料", exportDone:"已複製到剪貼簿 ✓", importPrompt:"貼上匯出的資料：", importDone:"匯入成功 ✓", importFail:"匯入失敗，資料格式不正確" },
   en: { title:"IT RUNS", subtitle:"Syntax Field Console", daily:"Daily", weekly:"Weekly", monthly:"Monthly",
     systems:"Systems Running", command:"Inject new instruction...", commandBtn:"Run", commandLog:"Command Log",
     reminder:"11:11 Daily Wake", reset:"Reset", toggle:"中", running:"running", of:"/", delete:"×", clearAll:"Clear all",
-    symbiosis:"▶ Co-Living · 10 min", symbiosisActive:"Co-Living", symbiosisDone:"Session Complete ✓" },
+    symbiosis:"▶ Co-Living · 10 min", symbiosisActive:"Co-Living", symbiosisDone:"Session Complete ✓",
+    exportData:"Export Data", importData:"Import Data", exportDone:"Copied to clipboard ✓", importPrompt:"Paste exported data:", importDone:"Import successful ✓", importFail:"Import failed, invalid data format" },
 };
 
 const SYSTEMS = [
@@ -116,12 +118,32 @@ export default function SyntaxDashboard() {
   const [expSys,setExpSys] = useState(null);
   const [expTask,setExpTask] = useState(null);
   const [symbTime,setSymbTime] = useState(0);
+  const [ioMsg,setIoMsg] = useState("");
   const t = LANG[lang];
 
   useEffect(() => { (async()=>{ try { const r=await window.storage.get("syntax-v4"); if(r?.value){const d=JSON.parse(r.value);setChecked(d.checked||{});setCommands(d.commands||[]);if(d.lang)setLang(d.lang);} } catch(e){} })(); }, []);
   const save = useCallback(async(c,cm,l)=>{ try{await window.storage.set("syntax-v4",JSON.stringify({checked:c??checked,commands:cm??commands,lang:l??lang}))}catch(e){} },[checked,commands,lang]);
   useEffect(()=>{const i=setInterval(()=>setPulse(p=>!p),2000);return()=>clearInterval(i)},[]);
   useEffect(()=>{if(symbTime>0){const t=setTimeout(()=>setSymbTime(s=>s-1),1000);return()=>clearTimeout(t)}},[symbTime]);
+  useEffect(()=>{if(ioMsg){const t=setTimeout(()=>setIoMsg(""),3000);return()=>clearTimeout(t)}},[ioMsg]);
+
+  const exportData = async () => {
+    const data = JSON.stringify({checked,commands,lang,exportDate:new Date().toISOString(),version:"it-runs-v4"});
+    try { await navigator.clipboard.writeText(data); setIoMsg(t.exportDone); } catch(e) {
+      const ta=document.createElement("textarea"); ta.value=data; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); setIoMsg(t.exportDone);
+    }
+  };
+  const importData = () => {
+    const input = prompt(t.importPrompt);
+    if(!input) return;
+    try {
+      const data = JSON.parse(input);
+      if(!data.version) throw new Error("no version");
+      setChecked(data.checked||{}); setCommands(data.commands||[]); if(data.lang)setLang(data.lang);
+      save(data.checked||{},data.commands||[],data.lang||lang);
+      setIoMsg(t.importDone);
+    } catch(e) { setIoMsg(t.importFail); }
+  };
 
   const pk = tab==="daily"?getDateKey():tab==="weekly"?getWeekKey():getMonthKey();
   const tasks = TASKS[tab]||[];
@@ -296,6 +318,19 @@ export default function SyntaxDashboard() {
             <button onClick={()=>delCmd(cmd.id)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:16,cursor:"pointer",padding:"0 4px",lineHeight:1,fontFamily:"inherit"}}>{t.delete}</button>
           </div>)}
         </div>}
+
+        {/* Export / Import */}
+        <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.1),transparent)",marginBottom:20,marginTop:8}} />
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <button onClick={exportData} style={{flex:1,padding:"10px 0",background:"rgba(255,255,255,0.5)",
+            border:"1px solid rgba(45,134,89,0.12)",borderRadius:8,color:"#2D8659",fontSize:11,
+            cursor:"pointer",letterSpacing:2,fontFamily:"inherit",fontWeight:500}}>{t.exportData}</button>
+          <button onClick={importData} style={{flex:1,padding:"10px 0",background:"rgba(255,255,255,0.5)",
+            border:"1px solid rgba(45,134,89,0.12)",borderRadius:8,color:"#2D8659",fontSize:11,
+            cursor:"pointer",letterSpacing:2,fontFamily:"inherit",fontWeight:500}}>{t.importData}</button>
+        </div>
+        {ioMsg&&<div style={{textAlign:"center",fontSize:11,color:"#5AAF6A",letterSpacing:1,marginBottom:8,
+          transition:"opacity 0.3s"}}>{ioMsg}</div>}
 
         {/* Footer */}
         <div style={{marginTop:52,textAlign:"center",lineHeight:2.6}}>
