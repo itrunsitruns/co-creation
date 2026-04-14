@@ -1,1 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>IT RUNS · 語法層控制台</title>
+  <meta name="description" content="IT RUNS — Syntax Field Console" />
 
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#2D8659" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- iOS Add-to-Home-Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="IT RUNS" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+
+  <style>
+    html, body { margin:0; padding:0; background:#f1f8e9; min-height:100%; -webkit-tap-highlight-color:transparent; }
+    body { font-family:'Georgia','Noto Serif TC',serif; overscroll-behavior-y:contain; }
+    #root { min-height:100vh; }
+    #boot {
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(170deg,#e8f5e9 0%,#f1f8e9 30%,#fefef6 60%,#faf6ee 100%);
+      color:#2D8659; letter-spacing:6px; font-size:14px; z-index:9999;
+      transition:opacity .6s;
+    }
+    #boot.gone { opacity:0; pointer-events:none; }
+    @keyframes pulse { 0%,100%{opacity:.5}50%{opacity:1} }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="boot"><span style="animation:pulse 1.8s ease-in-out infinite">IT RUNS · booting</span></div>
+
+  <!-- React (UMD) + Babel standalone -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    // ---- window.storage shim (Claude artifact API → localStorage) ----
+    // The original JSX uses window.storage.get/set; we map it to localStorage
+    // so the file works unchanged in a plain browser / PWA context.
+    window.storage = {
+      get: async (key) => {
+        try { const v = localStorage.getItem(key); return v == null ? null : { value: v }; }
+        catch (e) { return null; }
+      },
+      set: async (key, value) => {
+        try { localStorage.setItem(key, value); } catch (e) {}
+      }
+    };
+
+    // ---- Service worker (PWA installability + offline) ----
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(()=>{});
+      });
+    }
+
+    // ---- Load & compile the JSX file at runtime ----
+    // This keeps it-runs-dashboard-green.jsx as the single source of truth.
+    // Edit that file and push — the PWA picks up the changes.
+    (async () => {
+      try {
+        const res = await fetch('./it-runs-dashboard-green.jsx?v=' + Date.now());
+        let code = await res.text();
+
+        // Strip the ES module import (we'll use React globals instead)
+        code = code.replace(/^\s*import\s+\{[^}]*\}\s+from\s+["']react["'];?\s*$/m, '');
+        // Strip "export default" so SyntaxDashboard becomes a function declaration
+        code = code.replace(/export\s+default\s+function/, 'function');
+
+        // Prepend React hook destructuring; append mount call
+        const wrapped =
+          "const { useState, useEffect, useCallback, useRef } = React;\n" +
+          code +
+          "\nReactDOM.createRoot(document.getElementById('root')).render(React.createElement(SyntaxDashboard));\n";
+
+        const compiled = Babel.transform(wrapped, {
+          presets: [['react', { runtime: 'classic' }]]
+        }).code;
+
+        // Execute in global scope
+        (0, eval)(compiled);
+
+        document.getElementById('boot').classList.add('gone');
+      } catch (err) {
+        console.error(err);
+        document.getElementById('boot').innerHTML =
+          '<div style="font-family:monospace;font-size:12px;padding:20px;text-align:center;max-width:90%;">' +
+          '403 — load error<br><br>' + String(err).replace(/</g,'&lt;') + '</div>';
+      }
+    })();
+  </script>
+</body>
+</html>
