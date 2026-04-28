@@ -152,6 +152,8 @@ export default function SyntaxDashboard() {
   const done=tasks.filter(x=>chk(x.id)).length;
   const addCmd=()=>{if(!cmdInput.trim())return;const n=[{text:cmdInput.trim(),time:new Date().toLocaleString(),id:Date.now()},...commands].slice(0,50);setCommands(n);setCmdInput("");save(null,n,null);};
   const delCmd=(id)=>{const n=commands.filter(c=>c.id!==id);setCommands(n);save(null,n,null);};
+  const togCmd=(id)=>{const k=`${getDateKey()}-cmd-${id}`,n={...checked,[k]:!checked[k]};setChecked(n);save(n,null,null);};
+  const chkCmd=(id)=>!!checked[`${getDateKey()}-cmd-${id}`];
   const clrCmds=()=>{setCommands([]);save(null,[],null);};
   const rst=()=>{const n={...checked};tasks.forEach(x=>{delete n[`${pk}-${x.id}`]});setChecked(n);save(n,null,null);};
   const tl=()=>{const n=lang==="zh"?"en":"zh";setLang(n);save(null,null,n);};
@@ -310,14 +312,19 @@ export default function SyntaxDashboard() {
             <span style={{fontSize:10,letterSpacing:3,color:"#8faa82"}}>{t.commandLog}</span>
             <button onClick={clrCmds} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:9,cursor:"pointer",letterSpacing:1,fontFamily:"inherit"}}>{t.clearAll}</button>
           </div>
-          {commands.slice(0,15).map(cmd=><div key={cmd.id} style={{padding:"9px 0",borderBottom:"1px solid rgba(45,134,89,0.05)",display:"flex",alignItems:"flex-start",gap:8}}>
-            <div style={{flex:1}}>
+          {commands.slice(0,15).map(cmd=>{const cd=chkCmd(cmd.id);return <div key={cmd.id} style={{padding:"9px 6px",borderBottom:"1px solid rgba(45,134,89,0.05)",display:"flex",alignItems:"flex-start",gap:10,background:cd?"rgba(90,175,106,0.06)":"transparent",transition:"background 0.3s"}}>
+            <button onClick={()=>togCmd(cmd.id)} style={{width:18,height:18,borderRadius:4,flexShrink:0,marginTop:4,cursor:"pointer",
+              border:cd?"1.5px solid #5AAF6A":"1.5px solid rgba(45,134,89,0.2)",
+              background:cd?"rgba(90,175,106,0.15)":"rgba(255,255,255,0.5)",
+              display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.3s",padding:0,fontFamily:"inherit"}}>
+              {cd&&<span style={{color:"#2D8659",fontSize:11,fontWeight:700,lineHeight:1}}>✓</span>}
+            </button>
+            <div style={{flex:1,opacity:cd?0.55:1,transition:"opacity 0.3s"}}>
               <div style={{color:"#8faa82",fontSize:9,marginBottom:3,letterSpacing:1}}>{cmd.time}</div>
-              <div style={{color:"#3e5e40",fontSize:12,lineHeight:1.5}}><span style={{color:"#B8860B",opacity:0.5}}>→ </span>{cmd.text}</div>
+              <div style={{color:cd?"#5AAF6A":"#3e5e40",fontSize:12,lineHeight:1.5,textDecoration:cd?"line-through":"none",transition:"all 0.3s"}}><span style={{color:"#B8860B",opacity:0.5}}>→ </span>{cmd.text}</div>
             </div>
             <button onClick={()=>delCmd(cmd.id)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:16,cursor:"pointer",padding:"0 4px",lineHeight:1,fontFamily:"inherit"}}>{t.delete}</button>
-          </div>)}
-        </div>}
+          </div>;})}
 
         {/* Export / Import */}
         <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.1),transparent)",marginBottom:20,marginTop:8}} />
