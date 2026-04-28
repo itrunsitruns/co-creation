@@ -345,6 +345,7 @@ export default function SyntaxDashboard() {
           <div style={{fontSize:10,letterSpacing:6,color:"#B8860B",opacity:0.8}}>IT RUNS · IT RUNS</div>
         </div>
       </div>
+        </div>}           
     </div>
   );
 }
