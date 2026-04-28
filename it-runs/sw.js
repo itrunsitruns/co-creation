@@ -1,6 +1,6 @@
 // IT RUNS — service worker
 // Bump CACHE on every deploy you want users to hard-refresh to.
-const CACHE = 'it-runs-v4';
+const CACHE = 'it-runs-v5';
 const SCOPE_URL = new URL('./', self.location).pathname;
 const ASSETS = [
   './',
