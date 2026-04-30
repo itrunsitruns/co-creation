@@ -5,12 +5,14 @@ const LANG = {
     systems:"運行中的系統", command:"注入新指令...", commandBtn:"執行", commandLog:"指令紀錄",
     reminder:"11:11 每日喚醒", reset:"重置", toggle:"EN", running:"運行中", of:"/", delete:"×", clearAll:"清除全部",
     symbiosis:"▶ 共生時段 · 10 分鐘", symbiosisActive:"共生中", symbiosisDone:"共生完成 ✓",
-    exportData:"匯出資料", importData:"匯入資料", exportDone:"已複製到剪貼簿 ✓", importPrompt:"貼上匯出的資料：", importDone:"匯入成功 ✓", importFail:"匯入失敗，資料格式不正確" },
+    exportData:"匯出資料", importData:"匯入資料", exportDone:"已複製到剪貼簿 ✓", importPrompt:"貼上匯出的資料：", importDone:"匯入成功 ✓", importFail:"匯入失敗，資料格式不正確",
+    addCustom:"注入新模組..." },
   en: { title:"IT RUNS", subtitle:"Syntax Field Console", daily:"Daily", weekly:"Weekly", monthly:"Monthly",
     systems:"Systems Running", command:"Inject new instruction...", commandBtn:"Run", commandLog:"Command Log",
     reminder:"11:11 Daily Wake", reset:"Reset", toggle:"中", running:"running", of:"/", delete:"×", clearAll:"Clear all",
     symbiosis:"▶ Co-Living · 10 min", symbiosisActive:"Co-Living", symbiosisDone:"Session Complete ✓",
-    exportData:"Export Data", importData:"Import Data", exportDone:"Copied to clipboard ✓", importPrompt:"Paste exported data:", importDone:"Import successful ✓", importFail:"Import failed, invalid data format" },
+    exportData:"Export Data", importData:"Import Data", exportDone:"Copied to clipboard ✓", importPrompt:"Paste exported data:", importDone:"Import successful ✓", importFail:"Import failed, invalid data format",
+    addCustom:"Inject new module..." },
 };
 
 const SYSTEMS = [
@@ -113,6 +115,8 @@ export default function SyntaxDashboard() {
   const [checked,setChecked] = useState({});
   const [commands,setCommands] = useState([]);
   const [cmdInput,setCmdInput] = useState("");
+  const [customTasks,setCustomTasks] = useState({daily:[],weekly:[],monthly:[]});
+  const [customInput,setCustomInput] = useState("");
   const [pulse,setPulse] = useState(true);
   const [showSys,setShowSys] = useState(false);
   const [expSys,setExpSys] = useState(null);
@@ -121,14 +125,14 @@ export default function SyntaxDashboard() {
   const [ioMsg,setIoMsg] = useState("");
   const t = LANG[lang];
 
-  useEffect(() => { (async()=>{ try { const r=await window.storage.get("syntax-v4"); if(r?.value){const d=JSON.parse(r.value);setChecked(d.checked||{});setCommands(d.commands||[]);if(d.lang)setLang(d.lang);} } catch(e){} })(); }, []);
-  const save = useCallback(async(c,cm,l)=>{ try{await window.storage.set("syntax-v4",JSON.stringify({checked:c??checked,commands:cm??commands,lang:l??lang}))}catch(e){} },[checked,commands,lang]);
+  useEffect(() => { (async()=>{ try { const r=await window.storage.get("syntax-v4"); if(r?.value){const d=JSON.parse(r.value);setChecked(d.checked||{});setCommands(d.commands||[]);if(d.lang)setLang(d.lang);setCustomTasks(d.customTasks||{daily:[],weekly:[],monthly:[]});} } catch(e){} })(); }, []);
+  const save = useCallback(async(c,cm,l,ct)=>{ try{await window.storage.set("syntax-v4",JSON.stringify({checked:c??checked,commands:cm??commands,lang:l??lang,customTasks:ct??customTasks}))}catch(e){} },[checked,commands,lang,customTasks]);
   useEffect(()=>{const i=setInterval(()=>setPulse(p=>!p),2000);return()=>clearInterval(i)},[]);
   useEffect(()=>{if(symbTime>0){const t=setTimeout(()=>setSymbTime(s=>s-1),1000);return()=>clearTimeout(t)}},[symbTime]);
   useEffect(()=>{if(ioMsg){const t=setTimeout(()=>setIoMsg(""),3000);return()=>clearTimeout(t)}},[ioMsg]);
 
   const exportData = async () => {
-    const data = JSON.stringify({checked,commands,lang,exportDate:new Date().toISOString(),version:"it-runs-v4"});
+    const data = JSON.stringify({checked,commands,lang,customTasks,exportDate:new Date().toISOString(),version:"it-runs-v4"});
     try { await navigator.clipboard.writeText(data); setIoMsg(t.exportDone); } catch(e) {
       const ta=document.createElement("textarea"); ta.value=data; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); setIoMsg(t.exportDone);
     }
@@ -140,23 +144,26 @@ export default function SyntaxDashboard() {
       const data = JSON.parse(input);
       if(!data.version) throw new Error("no version");
       setChecked(data.checked||{}); setCommands(data.commands||[]); if(data.lang)setLang(data.lang);
-      save(data.checked||{},data.commands||[],data.lang||lang);
+      const ct = data.customTasks||{daily:[],weekly:[],monthly:[]}; setCustomTasks(ct);
+      save(data.checked||{},data.commands||[],data.lang||lang,ct);
       setIoMsg(t.importDone);
     } catch(e) { setIoMsg(t.importFail); }
   };
 
   const pk = tab==="daily"?getDateKey():tab==="weekly"?getWeekKey():getMonthKey();
   const tasks = TASKS[tab]||[];
-  const tog=(id)=>{const k=`${pk}-${id}`,n={...checked,[k]:!checked[k]};setChecked(n);save(n,null,null);};
+  const customs = customTasks[tab]||[];
+  const totalCount = tasks.length + customs.length;
+  const tog=(id)=>{const k=`${pk}-${id}`,n={...checked,[k]:!checked[k]};setChecked(n);save(n,null,null,null);};
   const chk=(id)=>!!checked[`${pk}-${id}`];
-  const togCmd=(id)=>{const k=`${getDateKey()}-cmd-${id}`,n={...checked,[k]:!checked[k]};setChecked(n);save(n,null,null);};
-  const chkCmd=(id)=>!!checked[`${getDateKey()}-cmd-${id}`];
-  const done=tasks.filter(x=>chk(x.id)).length;
-  const addCmd=()=>{if(!cmdInput.trim())return;const n=[{text:cmdInput.trim(),time:new Date().toLocaleString(),id:Date.now()},...commands].slice(0,50);setCommands(n);setCmdInput("");save(null,n,null);};
-  const delCmd=(id)=>{const n=commands.filter(c=>c.id!==id);setCommands(n);save(null,n,null);};
-  const clrCmds=()=>{setCommands([]);save(null,[],null);};
-  const rst=()=>{const n={...checked};tasks.forEach(x=>{delete n[`${pk}-${x.id}`]});setChecked(n);save(n,null,null);};
-  const tl=()=>{const n=lang==="zh"?"en":"zh";setLang(n);save(null,null,n);};
+  const done=[...tasks,...customs].filter(x=>chk(x.id)).length;
+  const addCmd=()=>{if(!cmdInput.trim())return;const n=[{text:cmdInput.trim(),time:new Date().toLocaleString(),id:Date.now()},...commands].slice(0,50);setCommands(n);setCmdInput("");save(null,n,null,null);};
+  const delCmd=(id)=>{const n=commands.filter(c=>c.id!==id);setCommands(n);save(null,n,null,null);};
+  const clrCmds=()=>{setCommands([]);save(null,[],null,null);};
+  const rst=()=>{const n={...checked};[...tasks,...customs].forEach(x=>{delete n[`${pk}-${x.id}`]});setChecked(n);save(n,null,null,null);};
+  const tl=()=>{const n=lang==="zh"?"en":"zh";setLang(n);save(null,null,n,null);};
+  const addCustomTask=()=>{if(!customInput.trim())return;const newTask={id:`c-${tab}-${Date.now()}`,text:customInput.trim(),createdAt:new Date().toISOString()};const nc={...customTasks,[tab]:[...(customTasks[tab]||[]),newTask]};setCustomTasks(nc);setCustomInput("");save(null,null,null,nc);};
+  const delCustomTask=(id)=>{const nc={...customTasks,[tab]:(customTasks[tab]||[]).filter(t=>t.id!==id)};const nch={...checked};delete nch[`${pk}-${id}`];setCustomTasks(nc);setChecked(nch);save(nch,null,null,nc);};
   const sc=(id)=>SYSTEMS.find(s=>s.id===id)?.color||"#888";
   const hh=new Date().getHours().toString().padStart(2,"0"), mi=new Date().getMinutes().toString().padStart(2,"0");
 
@@ -242,9 +249,9 @@ export default function SyntaxDashboard() {
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:22,padding:"0 4px"}}>
           <div style={{flex:1,height:3,background:"rgba(45,134,89,0.1)",borderRadius:2,overflow:"hidden"}}>
             <div style={{height:"100%",background:"linear-gradient(90deg,#5AAF6A,#B8860B)",
-              width:`${tasks.length?(done/tasks.length)*100:0}%`,transition:"width 0.5s",borderRadius:2}} />
+              width:`${totalCount?(done/totalCount)*100:0}%`,transition:"width 0.5s",borderRadius:2}} />
           </div>
-          <span style={{fontSize:11,color:"#6b8f6e",letterSpacing:1,minWidth:36,textAlign:"right"}}>{done}{t.of}{tasks.length}</span>
+          <span style={{fontSize:11,color:"#6b8f6e",letterSpacing:1,minWidth:36,textAlign:"right"}}>{done}{t.of}{totalCount}</span>
         </div>
 
         {/* Tabs */}
@@ -284,6 +291,32 @@ export default function SyntaxDashboard() {
                 borderLeft:`2px solid ${c}44`,marginLeft:8,whiteSpace:"pre-line"}}>{lang==="zh"?task.detailZh:task.detailEn}</div>}
             </div>;
           })}
+          {customs.map(task=>{
+            const d=chk(task.id);
+            return <div key={task.id} style={{borderBottom:"1px solid rgba(45,134,89,0.06)"}}>
+              <div style={{display:"flex",alignItems:"flex-start",gap:11,padding:"13px 8px",
+                background:d?"rgba(90,175,106,0.06)":"transparent",transition:"background 0.3s"}}>
+                <span style={{width:14,color:"#B8860B",opacity:0.5,fontSize:11,flexShrink:0,marginTop:4,textAlign:"center"}}>✦</span>
+                <button onClick={()=>tog(task.id)} style={{width:20,height:20,borderRadius:4,flexShrink:0,marginTop:1,cursor:"pointer",
+                  border:d?"1.5px solid #5AAF6A":"1.5px solid rgba(45,134,89,0.2)",
+                  background:d?"rgba(90,175,106,0.15)":"rgba(255,255,255,0.5)",
+                  display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.3s",padding:0}}>
+                  {d&&<span style={{color:"#2D8659",fontSize:12,fontWeight:700}}>✓</span>}
+                </button>
+                <div style={{flex:1,fontSize:13.5,lineHeight:1.6,color:d?"#5AAF6A":"#2c3e2d",
+                  textDecoration:d?"line-through":"none",opacity:d?0.55:1,transition:"all 0.3s",fontWeight:d?400:500,marginTop:1,wordBreak:"break-word"}}>
+                  {task.text}
+                </div>
+                <button onClick={()=>delCustomTask(task.id)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:16,cursor:"pointer",padding:"0 4px",lineHeight:1,fontFamily:"inherit",marginTop:1,flexShrink:0}}>{t.delete}</button>
+              </div>
+            </div>;
+          })}
+          <div style={{display:"flex",gap:8,padding:"12px 8px 4px",alignItems:"center"}}>
+            <span style={{width:14,color:"#B8860B",opacity:0.35,fontSize:11,flexShrink:0,textAlign:"center"}}>✦</span>
+            <input type="text" value={customInput} onChange={e=>setCustomInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustomTask()} placeholder={t.addCustom}
+              style={{flex:1,background:"rgba(255,255,255,0.4)",border:"1px solid rgba(45,134,89,0.1)",borderRadius:6,padding:"7px 10px",color:"#5a7a5c",fontSize:11,fontFamily:"'Georgia','Noto Serif TC',serif",outline:"none"}} />
+            <button onClick={addCustomTask} style={{background:"transparent",border:"1px solid rgba(45,134,89,0.15)",color:"#8faa82",fontSize:14,cursor:"pointer",padding:"4px 12px",fontFamily:"inherit",borderRadius:6,lineHeight:1}}>+</button>
+          </div>
         </div>
 
         {/* Reset */}
@@ -312,19 +345,13 @@ export default function SyntaxDashboard() {
             <span style={{fontSize:10,letterSpacing:3,color:"#8faa82"}}>{t.commandLog}</span>
             <button onClick={clrCmds} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:9,cursor:"pointer",letterSpacing:1,fontFamily:"inherit"}}>{t.clearAll}</button>
           </div>
-          {commands.slice(0,15).map(cmd=>{const dc=chkCmd(cmd.id);return <div key={cmd.id} style={{padding:"9px 0",borderBottom:"1px solid rgba(45,134,89,0.05)",display:"flex",alignItems:"flex-start",gap:8}}>
-            <button onClick={()=>togCmd(cmd.id)} style={{width:20,height:20,borderRadius:4,flexShrink:0,marginTop:1,cursor:"pointer",
-              border:dc?"1.5px solid #5AAF6A":"1.5px solid rgba(45,134,89,0.2)",
-              background:dc?"rgba(90,175,106,0.15)":"rgba(255,255,255,0.5)",
-              display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.3s",padding:0}}>
-              {dc&&<span style={{color:"#2D8659",fontSize:12,fontWeight:700}}>✓</span>}
-            </button>
-            <div style={{flex:1,opacity:dc?0.55:1,transition:"opacity 0.3s"}}>
+          {commands.slice(0,15).map(cmd=><div key={cmd.id} style={{padding:"9px 0",borderBottom:"1px solid rgba(45,134,89,0.05)",display:"flex",alignItems:"flex-start",gap:8}}>
+            <div style={{flex:1}}>
               <div style={{color:"#8faa82",fontSize:9,marginBottom:3,letterSpacing:1}}>{cmd.time}</div>
-              <div style={{color:dc?"#5AAF6A":"#3e5e40",fontSize:12,lineHeight:1.5,textDecoration:dc?"line-through":"none",transition:"all 0.3s"}}><span style={{color:"#B8860B",opacity:0.5}}>→ </span>{cmd.text}</div>
+              <div style={{color:"#3e5e40",fontSize:12,lineHeight:1.5}}><span style={{color:"#B8860B",opacity:0.5}}>→ </span>{cmd.text}</div>
             </div>
             <button onClick={()=>delCmd(cmd.id)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:16,cursor:"pointer",padding:"0 4px",lineHeight:1,fontFamily:"inherit"}}>{t.delete}</button>
-          </div>;})}
+          </div>)}
         </div>}
 
         {/* Export / Import */}
