@@ -61,6 +61,23 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 footer a{color:rgba(242,235,221,.85);text-decoration:none}
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}.reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.card,.btn{transition:none}}
+
+.card .ph{position:relative;cursor:zoom-in}
+.card .ph .more{position:absolute;left:8px;bottom:8px;background:rgba(43,34,40,.72);color:#fff;font-size:.66rem;letter-spacing:.06em;padding:3px 8px;border-radius:20px}
+.card .ph .zoom{position:absolute;right:8px;bottom:8px;background:rgba(250,246,238,.85);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;opacity:0;transition:opacity .2s}
+.card .ph:hover .zoom,.card .ph:focus .zoom{opacity:1}
+.lb{position:fixed;inset:0;z-index:200;background:rgba(20,16,18,.92);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.lb.open{display:flex}
+.lb img.main{max-width:92vw;max-height:74vh;object-fit:contain;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lb .cap{color:var(--cream);margin-top:14px;font-size:.95rem;letter-spacing:.04em;font-family:'Noto Serif TC',serif}
+.lb .thumbs{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center;max-width:92vw}
+.lb .thumbs img{width:54px;height:68px;object-fit:cover;border-radius:3px;opacity:.5;cursor:pointer;border:2px solid transparent}
+.lb .thumbs img.active{opacity:1;border-color:var(--cognac)}
+.lb button{position:absolute;background:rgba(242,235,221,.14);color:var(--cream);border:none;width:48px;height:48px;border-radius:50%;font-size:1.5rem;cursor:pointer;transition:background .2s}
+.lb button:hover{background:rgba(242,235,221,.3)}
+.lb .prev{left:18px;top:50%;transform:translateY(-50%)}.lb .next{right:18px;top:50%;transform:translateY(-50%)}
+.lb .close{top:18px;right:18px;width:42px;height:42px;font-size:1.2rem}
+@media(max-width:600px){.lb .prev{left:6px}.lb .next{right:6px}.lb img.main{max-height:66vh}}
 </style>
 </head>
 <body>
@@ -76,7 +93,7 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
   <p class="eyebrow">Israel → Taiwan</p>
   <h1>來自以色列的手感織品<br>第一站：圍巾<span class="he">צעיפים מישראל</span></h1>
   <p>Dreadlocks 是以色列的自然系服飾品牌，以根源文化與大地色彩聞名。Signa Taiwan 把它完整地帶來台灣——從一條圍巾開始。本系列 56 款顏色，每一條都有自己的希伯來名字。</p>
-  <div class="cta-row"><a class="btn btn-solid" href="#flow">瀏覽圍巾</a><a class="btn btn-line" href="#story">品牌故事</a></div>
+  <div class="cta-row"><a class="btn btn-solid" href="#poncho">看招牌斗篷</a><a class="btn btn-line" href="#story">品牌故事</a></div>
 </div>
 <div class="swatch-strip" aria-hidden="true"><span style="background:var(--eggplant)"></span><span style="background:var(--olive)"></span><span style="background:var(--cognac)"></span><span style="background:var(--mocha)"></span><span style="background:var(--cream)"></span></div>
   <section id="flow">
@@ -84,7 +101,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
       <div class="sec-head reveal"><p class="kicker">Polyester Printed Scarves・13 款</p><h2>聚酯印花圍巾</h2><p class="sec-desc">輕盈飄逸、色彩飽和的長圍巾，180×92 cm，垂墜感佳，四季皆宜；可作頸巾、披巾或頭巾。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS45_41_00.jpg" alt="民族圖騰圍巾 橘"></div>
+        <div class="ph" data-images='[&quot;assets/CS45_41_00.jpg&quot;]' data-title="民族圖騰圍巾・橘" tabindex="0" role="button" aria-label="放大檢視 民族圖騰圍巾 橘">
+          <img loading="lazy" src="assets/CS45_41_00.jpg" alt="民族圖騰圍巾 橘">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אינדיאני</p>
           <h3>民族圖騰圍巾・橘</h3>
@@ -94,7 +114,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS45_50_00.jpg" alt="民族圖騰圍巾 桃紅"></div>
+        <div class="ph" data-images='[&quot;assets/CS45_50_00.jpg&quot;]' data-title="民族圖騰圍巾・桃紅" tabindex="0" role="button" aria-label="放大檢視 民族圖騰圍巾 桃紅">
+          <img loading="lazy" src="assets/CS45_50_00.jpg" alt="民族圖騰圍巾 桃紅">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אינדיאני</p>
           <h3>民族圖騰圍巾・桃紅</h3>
@@ -104,7 +127,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS45_92_00.jpg" alt="民族圖騰圍巾 綠"></div>
+        <div class="ph" data-images='[&quot;assets/CS45_92_00.jpg&quot;]' data-title="民族圖騰圍巾・綠" tabindex="0" role="button" aria-label="放大檢視 民族圖騰圍巾 綠">
+          <img loading="lazy" src="assets/CS45_92_00.jpg" alt="民族圖騰圍巾 綠">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אינדיאני</p>
           <h3>民族圖騰圍巾・綠</h3>
@@ -114,7 +140,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS46_23_00.jpg" alt="波浪紋圍巾 紅"></div>
+        <div class="ph" data-images='[&quot;assets/CS46_23_00.jpg&quot;]' data-title="波浪紋圍巾・紅" tabindex="0" role="button" aria-label="放大檢視 波浪紋圍巾 紅">
+          <img loading="lazy" src="assets/CS46_23_00.jpg" alt="波浪紋圍巾 紅">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גלים</p>
           <h3>波浪紋圍巾・紅</h3>
@@ -124,7 +153,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS46_50_00.jpg" alt="波浪紋圍巾 桃紅"></div>
+        <div class="ph" data-images='[&quot;assets/CS46_50_00.jpg&quot;]' data-title="波浪紋圍巾・桃紅" tabindex="0" role="button" aria-label="放大檢視 波浪紋圍巾 桃紅">
+          <img loading="lazy" src="assets/CS46_50_00.jpg" alt="波浪紋圍巾 桃紅">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גלים</p>
           <h3>波浪紋圍巾・桃紅</h3>
@@ -134,7 +166,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS46_70_00.jpg" alt="波浪紋圍巾 棕"></div>
+        <div class="ph" data-images='[&quot;assets/CS46_70_00.jpg&quot;]' data-title="波浪紋圍巾・棕" tabindex="0" role="button" aria-label="放大檢視 波浪紋圍巾 棕">
+          <img loading="lazy" src="assets/CS46_70_00.jpg" alt="波浪紋圍巾 棕">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גלים</p>
           <h3>波浪紋圍巾・棕</h3>
@@ -144,7 +179,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS47_22_00.jpg" alt="民族風圍巾 藍"></div>
+        <div class="ph" data-images='[&quot;assets/CS47_22_00.jpg&quot;]' data-title="民族風圍巾・藍" tabindex="0" role="button" aria-label="放大檢視 民族風圍巾 藍">
+          <img loading="lazy" src="assets/CS47_22_00.jpg" alt="民族風圍巾 藍">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אתני</p>
           <h3>民族風圍巾・藍</h3>
@@ -154,7 +192,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS47_33_00.jpg" alt="民族風圍巾 芥末黃"></div>
+        <div class="ph" data-images='[&quot;assets/CS47_33_00.jpg&quot;]' data-title="民族風圍巾・芥末黃" tabindex="0" role="button" aria-label="放大檢視 民族風圍巾 芥末黃">
+          <img loading="lazy" src="assets/CS47_33_00.jpg" alt="民族風圍巾 芥末黃">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אתני</p>
           <h3>民族風圍巾・芥末黃</h3>
@@ -164,7 +205,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS47_92_00.jpg" alt="民族風圍巾 綠"></div>
+        <div class="ph" data-images='[&quot;assets/CS47_92_00.jpg&quot;]' data-title="民族風圍巾・綠" tabindex="0" role="button" aria-label="放大檢視 民族風圍巾 綠">
+          <img loading="lazy" src="assets/CS47_92_00.jpg" alt="民族風圍巾 綠">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף אתני</p>
           <h3>民族風圍巾・綠</h3>
@@ -174,7 +218,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS48_15_00.jpg" alt="葉影印花圍巾 灰"></div>
+        <div class="ph" data-images='[&quot;assets/CS48_15_00.jpg&quot;]' data-title="葉影印花圍巾・灰" tabindex="0" role="button" aria-label="放大檢視 葉影印花圍巾 灰">
+          <img loading="lazy" src="assets/CS48_15_00.jpg" alt="葉影印花圍巾 灰">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף עלים</p>
           <h3>葉影印花圍巾・灰</h3>
@@ -184,7 +231,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS48_22_00.jpg" alt="葉影印花圍巾 藍"></div>
+        <div class="ph" data-images='[&quot;assets/CS48_22_00.jpg&quot;]' data-title="葉影印花圍巾・藍" tabindex="0" role="button" aria-label="放大檢視 葉影印花圍巾 藍">
+          <img loading="lazy" src="assets/CS48_22_00.jpg" alt="葉影印花圍巾 藍">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף עלים</p>
           <h3>葉影印花圍巾・藍</h3>
@@ -194,7 +244,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS48_26_00.jpg" alt="葉影印花圍巾 摩卡"></div>
+        <div class="ph" data-images='[&quot;assets/CS48_26_00.jpg&quot;]' data-title="葉影印花圍巾・摩卡" tabindex="0" role="button" aria-label="放大檢視 葉影印花圍巾 摩卡">
+          <img loading="lazy" src="assets/CS48_26_00.jpg" alt="葉影印花圍巾 摩卡">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף עלים</p>
           <h3>葉影印花圍巾・摩卡</h3>
@@ -204,7 +257,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS48_41_00.jpg" alt="葉影印花圍巾 橘"></div>
+        <div class="ph" data-images='[&quot;assets/CS48_41_00.jpg&quot;]' data-title="葉影印花圍巾・橘" tabindex="0" role="button" aria-label="放大檢視 葉影印花圍巾 橘">
+          <img loading="lazy" src="assets/CS48_41_00.jpg" alt="葉影印花圍巾 橘">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף עלים</p>
           <h3>葉影印花圍巾・橘</h3>
@@ -221,7 +277,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
       <div class="sec-head reveal"><p class="kicker">Cotton Printed Scarves・19 款</p><h2>純棉印花圍巾</h2><p class="sec-desc">100% 純棉，柔軟透氣、親膚舒適，180×86 cm（部分款 200 cm）；每一條都有自己的圖案個性。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS53_01_00.jpg" alt="繽紛花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS53_01_00.jpg&quot;]' data-title="繽紛花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 繽紛花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS53_01_00.jpg" alt="繽紛花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פרת צבעוני</p>
           <h3>繽紛花卉圍巾・繽紛印花</h3>
@@ -231,7 +290,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS54_01_00.jpg" alt="黑底花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS54_01_00.jpg&quot;]' data-title="黑底花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 黑底花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS54_01_00.jpg" alt="黑底花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פרח שחור</p>
           <h3>黑底花卉圍巾・繽紛印花</h3>
@@ -241,7 +303,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS55_01_00.jpg" alt="奶油花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS55_01_00.jpg&quot;]' data-title="奶油花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 奶油花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS55_01_00.jpg" alt="奶油花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פרח שמנת</p>
           <h3>奶油花卉圍巾・繽紛印花</h3>
@@ -251,7 +316,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS56_01_00.jpg" alt="菱格紋圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS56_01_00.jpg&quot;]' data-title="菱格紋圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 菱格紋圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS56_01_00.jpg" alt="菱格紋圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף מעויין</p>
           <h3>菱格紋圍巾・繽紛印花</h3>
@@ -261,7 +329,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS57_01_00.jpg" alt="圖騰印花圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS57_01_00.jpg&quot;]' data-title="圖騰印花圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 圖騰印花圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS57_01_00.jpg" alt="圖騰印花圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חג&#x27;יגי</p>
           <h3>圖騰印花圍巾・繽紛印花</h3>
@@ -271,7 +342,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS58_01_00.jpg" alt="菱形紋圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS58_01_00.jpg&quot;]' data-title="菱形紋圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 菱形紋圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS58_01_00.jpg" alt="菱形紋圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף מעוינים</p>
           <h3>菱形紋圍巾・繽紛印花</h3>
@@ -281,7 +355,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS60_01_00.jpg" alt="水滴紋圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS60_01_00.jpg&quot;]' data-title="水滴紋圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 水滴紋圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS60_01_00.jpg" alt="水滴紋圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף טיפות</p>
           <h3>水滴紋圍巾・繽紛印花</h3>
@@ -291,7 +368,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS61_01_00.jpg" alt="夏日圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS61_01_00.jpg&quot;]' data-title="夏日圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 夏日圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS61_01_00.jpg" alt="夏日圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף קיצי</p>
           <h3>夏日圍巾・繽紛印花</h3>
@@ -301,7 +381,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS62_01_00.jpg" alt="藍調圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS62_01_00.jpg&quot;]' data-title="藍調圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 藍調圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS62_01_00.jpg" alt="藍調圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גוון כחול</p>
           <h3>藍調圍巾・繽紛印花</h3>
@@ -311,7 +394,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS63_01_00.jpg" alt="夏日花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS63_01_00.jpg&quot;]' data-title="夏日花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 夏日花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS63_01_00.jpg" alt="夏日花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פרחי קיץ</p>
           <h3>夏日花卉圍巾・繽紛印花</h3>
@@ -321,7 +407,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS64_01_00.jpg" alt="棕調圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS64_01_00.jpg&quot;]' data-title="棕調圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 棕調圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS64_01_00.jpg" alt="棕調圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גווני חום</p>
           <h3>棕調圍巾・繽紛印花</h3>
@@ -331,7 +420,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS66_01_00.jpg" alt="綻放花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS66_01_00.jpg&quot;]' data-title="綻放花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 綻放花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS66_01_00.jpg" alt="綻放花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פריחה</p>
           <h3>綻放花卉圍巾・繽紛印花</h3>
@@ -341,7 +433,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS68_01_00.jpg" alt="幾何紋圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS68_01_00.jpg&quot;]' data-title="幾何紋圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 幾何紋圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS68_01_00.jpg" alt="幾何紋圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף גאומטרי</p>
           <h3>幾何紋圍巾・繽紛印花</h3>
@@ -351,7 +446,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS69_01_00.jpg" alt="繽紛歡樂圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS69_01_00.jpg&quot;]' data-title="繽紛歡樂圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 繽紛歡樂圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS69_01_00.jpg" alt="繽紛歡樂圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף שמחי</p>
           <h3>繽紛歡樂圍巾・繽紛印花</h3>
@@ -361,7 +459,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS70_01_00.jpg" alt="淺藍圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS70_01_00.jpg&quot;]' data-title="淺藍圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 淺藍圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS70_01_00.jpg" alt="淺藍圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כחלחל</p>
           <h3>淺藍圍巾・繽紛印花</h3>
@@ -371,7 +472,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS71_01_00.jpg" alt="藍色圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS71_01_00.jpg&quot;]' data-title="藍色圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 藍色圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS71_01_00.jpg" alt="藍色圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כחול</p>
           <h3>藍色圍巾・繽紛印花</h3>
@@ -381,7 +485,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS72_01_00.jpg" alt="粉彩圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS72_01_00.jpg&quot;]' data-title="粉彩圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 粉彩圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS72_01_00.jpg" alt="粉彩圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פסטל</p>
           <h3>粉彩圍巾・繽紛印花</h3>
@@ -391,7 +498,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS73_01_00.jpg" alt="芥末黃圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS73_01_00.jpg&quot;]' data-title="芥末黃圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 芥末黃圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS73_01_00.jpg" alt="芥末黃圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חרדל</p>
           <h3>芥末黃圍巾・繽紛印花</h3>
@@ -401,7 +511,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS74_01_00.jpg" alt="花卉圍巾 繽紛印花"></div>
+        <div class="ph" data-images='[&quot;assets/CS74_01_00.jpg&quot;]' data-title="花卉圍巾・繽紛印花" tabindex="0" role="button" aria-label="放大檢視 花卉圍巾 繽紛印花">
+          <img loading="lazy" src="assets/CS74_01_00.jpg" alt="花卉圍巾 繽紛印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף פרח</p>
           <h3>花卉圍巾・繽紛印花</h3>
@@ -418,7 +531,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
       <div class="sec-head reveal"><p class="kicker">Sahara &amp; Plain・10 款</p><h2>撒哈拉 &amp; 素色</h2><p class="sec-desc">素雅好搭的長圍巾。撒哈拉款 200×86 cm、邊緣短流蘇；素色款 180×86 cm，輕柔點綴。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS51_2_00.jpg" alt="撒哈拉長圍巾 深灰"></div>
+        <div class="ph" data-images='[&quot;assets/CS51_2_00.jpg&quot;]' data-title="撒哈拉長圍巾・深灰" tabindex="0" role="button" aria-label="放大檢視 撒哈拉長圍巾 深灰">
+          <img loading="lazy" src="assets/CS51_2_00.jpg" alt="撒哈拉長圍巾 深灰">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף סהרה</p>
           <h3>撒哈拉長圍巾・深灰</h3>
@@ -428,7 +544,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS51_7_00.jpg" alt="撒哈拉長圍巾 白"></div>
+        <div class="ph" data-images='[&quot;assets/CS51_7_00.jpg&quot;]' data-title="撒哈拉長圍巾・白" tabindex="0" role="button" aria-label="放大檢視 撒哈拉長圍巾 白">
+          <img loading="lazy" src="assets/CS51_7_00.jpg" alt="撒哈拉長圍巾 白">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף סהרה</p>
           <h3>撒哈拉長圍巾・白</h3>
@@ -438,7 +557,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS51_69_00.jpg" alt="撒哈拉長圍巾 玫瑰粉"></div>
+        <div class="ph" data-images='[&quot;assets/CS51_69_00.jpg&quot;]' data-title="撒哈拉長圍巾・玫瑰粉" tabindex="0" role="button" aria-label="放大檢視 撒哈拉長圍巾 玫瑰粉">
+          <img loading="lazy" src="assets/CS51_69_00.jpg" alt="撒哈拉長圍巾 玫瑰粉">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף סהרה</p>
           <h3>撒哈拉長圍巾・玫瑰粉</h3>
@@ -448,7 +570,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS51_111_00.jpg" alt="撒哈拉長圍巾 丹寧藍"></div>
+        <div class="ph" data-images='[&quot;assets/CS51_111_00.jpg&quot;]' data-title="撒哈拉長圍巾・丹寧藍" tabindex="0" role="button" aria-label="放大檢視 撒哈拉長圍巾 丹寧藍">
+          <img loading="lazy" src="assets/CS51_111_00.jpg" alt="撒哈拉長圍巾 丹寧藍">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף סהרה</p>
           <h3>撒哈拉長圍巾・丹寧藍</h3>
@@ -458,7 +583,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS51_116_00.jpg" alt="撒哈拉長圍巾 咖啡"></div>
+        <div class="ph" data-images='[&quot;assets/CS51_116_00.jpg&quot;]' data-title="撒哈拉長圍巾・咖啡" tabindex="0" role="button" aria-label="放大檢視 撒哈拉長圍巾 咖啡">
+          <img loading="lazy" src="assets/CS51_116_00.jpg" alt="撒哈拉長圍巾 咖啡">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף סהרה</p>
           <h3>撒哈拉長圍巾・咖啡</h3>
@@ -468,7 +596,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS52_2_00.jpg" alt="素色圍巾 深灰"></div>
+        <div class="ph" data-images='[&quot;assets/CS52_2_00.jpg&quot;]' data-title="素色圍巾・深灰" tabindex="0" role="button" aria-label="放大檢視 素色圍巾 深灰">
+          <img loading="lazy" src="assets/CS52_2_00.jpg" alt="素色圍巾 深灰">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חלק</p>
           <h3>素色圍巾・深灰</h3>
@@ -478,7 +609,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS52_22_00.jpg" alt="素色圍巾 藍"></div>
+        <div class="ph" data-images='[&quot;assets/CS52_22_00.jpg&quot;]' data-title="素色圍巾・藍" tabindex="0" role="button" aria-label="放大檢視 素色圍巾 藍">
+          <img loading="lazy" src="assets/CS52_22_00.jpg" alt="素色圍巾 藍">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חלק</p>
           <h3>素色圍巾・藍</h3>
@@ -488,7 +622,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS52_27_00.jpg" alt="素色圍巾 奶油"></div>
+        <div class="ph" data-images='[&quot;assets/CS52_27_00.jpg&quot;]' data-title="素色圍巾・奶油" tabindex="0" role="button" aria-label="放大檢視 素色圍巾 奶油">
+          <img loading="lazy" src="assets/CS52_27_00.jpg" alt="素色圍巾 奶油">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חלק</p>
           <h3>素色圍巾・奶油</h3>
@@ -498,7 +635,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS52_34_00.jpg" alt="素色圍巾 煙燻粉"></div>
+        <div class="ph" data-images='[&quot;assets/CS52_34_00.jpg&quot;]' data-title="素色圍巾・煙燻粉" tabindex="0" role="button" aria-label="放大檢視 素色圍巾 煙燻粉">
+          <img loading="lazy" src="assets/CS52_34_00.jpg" alt="素色圍巾 煙燻粉">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חלק</p>
           <h3>素色圍巾・煙燻粉</h3>
@@ -508,7 +648,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS52_86_00.jpg" alt="素色圍巾 瓶綠"></div>
+        <div class="ph" data-images='[&quot;assets/CS52_86_00.jpg&quot;]' data-title="素色圍巾・瓶綠" tabindex="0" role="button" aria-label="放大檢視 素色圍巾 瓶綠">
+          <img loading="lazy" src="assets/CS52_86_00.jpg" alt="素色圍巾 瓶綠">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף חלק</p>
           <h3>素色圍巾・瓶綠</h3>
@@ -525,7 +668,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
       <div class="sec-head reveal"><p class="kicker">Cotton Large Scarves・4 款</p><h2>純棉大方巾</h2><p class="sec-desc">100% 純棉大尺幅（約 180×110 cm），可當圍巾、披肩，也能作沙灘罩衫。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/LIC06_00_O-S.jpg" alt="純棉大方巾 藍印花"></div>
+        <div class="ph" data-images='[&quot;assets/LIC06_00_O-S.jpg&quot;]' data-title="純棉大方巾・藍印花" tabindex="0" role="button" aria-label="放大檢視 純棉大方巾 藍印花">
+          <img loading="lazy" src="assets/LIC06_00_O-S.jpg" alt="純棉大方巾 藍印花">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כותנה</p>
           <h3>純棉大方巾・藍印花</h3>
@@ -535,7 +681,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/LIC07_00_O-S.jpg" alt="純棉大方巾 深藍花卉"></div>
+        <div class="ph" data-images='[&quot;assets/LIC07_00_O-S.jpg&quot;]' data-title="純棉大方巾・深藍花卉" tabindex="0" role="button" aria-label="放大檢視 純棉大方巾 深藍花卉">
+          <img loading="lazy" src="assets/LIC07_00_O-S.jpg" alt="純棉大方巾 深藍花卉">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כותנה</p>
           <h3>純棉大方巾・深藍花卉</h3>
@@ -545,7 +694,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/LIC19_00_O-S.jpg" alt="純棉大方巾 桃紫花卉"></div>
+        <div class="ph" data-images='[&quot;assets/LIC19_00_O-S.jpg&quot;]' data-title="純棉大方巾・桃紫花卉" tabindex="0" role="button" aria-label="放大檢視 純棉大方巾 桃紫花卉">
+          <img loading="lazy" src="assets/LIC19_00_O-S.jpg" alt="純棉大方巾 桃紫花卉">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כותנה</p>
           <h3>純棉大方巾・桃紫花卉</h3>
@@ -555,7 +707,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/LIC20_00_O-S.jpg" alt="純棉大方巾 黑白斑馬"></div>
+        <div class="ph" data-images='[&quot;assets/LIC20_00_O-S.jpg&quot;]' data-title="純棉大方巾・黑白斑馬" tabindex="0" role="button" aria-label="放大檢視 純棉大方巾 黑白斑馬">
+          <img loading="lazy" src="assets/LIC20_00_O-S.jpg" alt="純棉大方巾 黑白斑馬">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף כותנה</p>
           <h3>純棉大方巾・黑白斑馬</h3>
@@ -572,7 +727,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
       <div class="sec-head reveal"><p class="kicker">Crinkled Scarf・1 款</p><h2>皺褶感圍巾</h2><p class="sec-desc">薄透皺褶質感，輕盈包覆、層次十足（材質與尺寸以原廠確認為準）。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/CS10_6_00.jpg" alt="皺褶感圍巾 鐵灰"></div>
+        <div class="ph" data-images='[&quot;assets/CS10_6_00.jpg&quot;]' data-title="皺褶感圍巾・鐵灰" tabindex="0" role="button" aria-label="放大檢視 皺褶感圍巾 鐵灰">
+          <img loading="lazy" src="assets/CS10_6_00.jpg" alt="皺褶感圍巾 鐵灰">
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">צעיף מקומט</p>
           <h3>皺褶感圍巾・鐵灰</h3>
@@ -586,10 +744,13 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
   </section>
   <section id="poncho">
     <div class="wrap">
-      <div class="sec-head reveal"><p class="kicker">Knit Poncho・9 款</p><h2>針織披肩斗篷</h2><p class="sec-desc">老闆的最愛 ♥ 輕薄針織披肩，One Size，多色可選，慵懶優雅、隨性百搭。</p></div>
+      <div class="sec-head reveal"><p class="kicker">Knit Poncho・9 款</p><h2>針織披肩斗篷</h2><p class="sec-desc">老闆的最愛 ♥ 輕薄針織披肩，One Size，多色可選。每款附「一圈全色圖」可參考完整色系。</p></div>
       <div class="grid">
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_7_O-S.jpg" alt="針織披肩斗篷 白"></div>
+        <div class="ph" data-images='[&quot;assets/PON_7_O-S__1.jpg&quot;, &quot;assets/PON_7_O-S__2.jpg&quot;, &quot;assets/PON_7_O-S__3.jpg&quot;, &quot;assets/PON_7_O-S__4.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・白" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 白">
+          <img loading="lazy" src="assets/PON_7_O-S__1.jpg" alt="針織披肩斗篷 白"><span class="more">＋4</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・白</h3>
@@ -599,7 +760,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_11_O-S.jpg" alt="針織披肩斗篷 酒紅"></div>
+        <div class="ph" data-images='[&quot;assets/PON_11_O-S__1.jpg&quot;, &quot;assets/PON_11_O-S__2.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・酒紅" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 酒紅">
+          <img loading="lazy" src="assets/PON_11_O-S__1.jpg" alt="針織披肩斗篷 酒紅"><span class="more">＋2</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・酒紅</h3>
@@ -609,7 +773,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_17_O-S.jpg" alt="針織披肩斗篷 橄欖"></div>
+        <div class="ph" data-images='[&quot;assets/PON_17_O-S.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・橄欖" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 橄欖">
+          <img loading="lazy" src="assets/PON_17_O-S.jpg" alt="針織披肩斗篷 橄欖"><span class="more">＋1</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・橄欖</h3>
@@ -619,7 +786,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_42_O-S.jpg" alt="針織披肩斗篷 青瓷"></div>
+        <div class="ph" data-images='[&quot;assets/PON_42_O-S__1.jpg&quot;, &quot;assets/PON_42_O-S__2.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・青瓷" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 青瓷">
+          <img loading="lazy" src="assets/PON_42_O-S__1.jpg" alt="針織披肩斗篷 青瓷"><span class="more">＋2</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・青瓷</h3>
@@ -629,7 +799,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_77_O-S.jpg" alt="針織披肩斗篷 肉桂"></div>
+        <div class="ph" data-images='[&quot;assets/PON_77_O-S__1.jpg&quot;, &quot;assets/PON_77_O-S__2.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・肉桂" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 肉桂">
+          <img loading="lazy" src="assets/PON_77_O-S__1.jpg" alt="針織披肩斗篷 肉桂"><span class="more">＋2</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・肉桂</h3>
@@ -639,7 +812,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_86_O-S.jpg" alt="針織披肩斗篷 瓶綠"></div>
+        <div class="ph" data-images='[&quot;assets/PON_86_O-S__1.jpg&quot;, &quot;assets/PON_86_O-S__2.jpg&quot;, &quot;assets/PON_86_O-S__3.jpg&quot;, &quot;assets/PON_86_O-S__4.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・瓶綠" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 瓶綠">
+          <img loading="lazy" src="assets/PON_86_O-S__1.jpg" alt="針織披肩斗篷 瓶綠"><span class="more">＋4</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・瓶綠</h3>
@@ -649,7 +825,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_96_O-S.jpg" alt="針織披肩斗篷 天藍"></div>
+        <div class="ph" data-images='[&quot;assets/PON_96_O-S__1.jpg&quot;, &quot;assets/PON_96_O-S__2.jpg&quot;, &quot;assets/PON_96_O-S__3.jpg&quot;, &quot;assets/PON_96_O-S__4.jpg&quot;, &quot;assets/PON_96_O-S__5.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・天藍" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 天藍">
+          <img loading="lazy" src="assets/PON_96_O-S__1.jpg" alt="針織披肩斗篷 天藍"><span class="more">＋5</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・天藍</h3>
@@ -659,7 +838,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_103_O-S.jpg" alt="針織披肩斗篷 金"></div>
+        <div class="ph" data-images='[&quot;assets/PON_103_O-S.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・金" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 金">
+          <img loading="lazy" src="assets/PON_103_O-S.jpg" alt="針織披肩斗篷 金"><span class="more">＋1</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・金</h3>
@@ -669,7 +851,10 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
         </div>
       </div>
       <div class="card reveal">
-        <div class="ph"><img loading="lazy" src="assets/PON_548_O-S.jpg" alt="針織披肩斗篷 酪梨綠"></div>
+        <div class="ph" data-images='[&quot;assets/PON_548_O-S__1.jpg&quot;, &quot;assets/PON_548_O-S__2.jpg&quot;, &quot;assets/PON__ring.jpg&quot;]' data-title="針織披肩斗篷・酪梨綠" tabindex="0" role="button" aria-label="放大檢視 針織披肩斗篷 酪梨綠">
+          <img loading="lazy" src="assets/PON_548_O-S__1.jpg" alt="針織披肩斗篷 酪梨綠"><span class="more">＋2</span>
+          <span class="zoom">🔍</span>
+        </div>
         <div class="info">
           <p class="he-name">פונצ&#x27;ו סריג</p>
           <h3>針織披肩斗篷・酪梨綠</h3>
@@ -690,8 +875,34 @@ footer a{color:rgba(242,235,221,.85);text-decoration:none}
   <div>© Signa Taiwan・以色列 Dreadlocks 原廠選品<br>Chen, Chieh-Chun　|　signataiwan@gmail.com　|　WhatsApp +886 900 441 012</div>
   <div><a href="#">蝦皮賣場</a> ・ <a href="#">Instagram</a> ・ <a href="../">Co-Creation ↗</a></div>
 </div></footer>
+
+<div class="lb" id="lb" aria-modal="true" role="dialog">
+  <button class="close" id="lbClose" aria-label="關閉">✕</button>
+  <button class="prev" id="lbPrev" aria-label="上一張">‹</button>
+  <img class="main" id="lbImg" src="" alt="">
+  <button class="next" id="lbNext" aria-label="下一張">›</button>
+  <div class="cap" id="lbCap"></div>
+  <div class="thumbs" id="lbThumbs"></div>
+</div>
 <script>
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+(function(){
+  const lb=document.getElementById('lb'),img=document.getElementById('lbImg'),cap=document.getElementById('lbCap'),th=document.getElementById('lbThumbs');
+  let imgs=[],idx=0;
+  function show(i){idx=(i+imgs.length)%imgs.length;img.src=imgs[idx];[...th.children].forEach((t,j)=>t.classList.toggle('active',j===idx));}
+  function open(images,title){imgs=images;cap.textContent=title;th.innerHTML='';images.forEach((src,j)=>{const t=document.createElement('img');t.src=src;t.addEventListener('click',()=>show(j));th.appendChild(t);});show(0);lb.classList.add('open');}
+  function close(){lb.classList.remove('open');}
+  document.querySelectorAll('.ph').forEach(ph=>{
+    const open_=()=>{try{open(JSON.parse(ph.dataset.images),ph.dataset.title)}catch(e){}};
+    ph.addEventListener('click',open_);
+    ph.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open_()}});
+  });
+  document.getElementById('lbClose').onclick=close;
+  document.getElementById('lbPrev').onclick=()=>show(idx-1);
+  document.getElementById('lbNext').onclick=()=>show(idx+1);
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(idx-1);if(e.key==='ArrowRight')show(idx+1);});
+})();
 </script>
 </body></html>
