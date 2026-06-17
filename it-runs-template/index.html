@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>IT RUNS · 你的執行台</title>
+  <meta name="description" content="IT RUNS — a blank build-your-own console. 自己填寫的執行台。" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#2D8659" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- iOS Add-to-Home-Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="IT RUNS" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png" />
+
+  <style>
+    html, body { margin:0; padding:0; background:#f1f8e9; min-height:100%; -webkit-tap-highlight-color:transparent; }
+    body { font-family:'Georgia','Noto Serif TC',serif; overscroll-behavior-y:contain; }
+    #root { min-height:100vh; }
+    #boot {
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(170deg,#e8f5e9 0%,#f1f8e9 30%,#fefef6 60%,#faf6ee 100%);
+      color:#2D8659; letter-spacing:6px; font-size:14px; z-index:9999; transition:opacity .6s;
+    }
+    #boot.gone { opacity:0; pointer-events:none; }
+    @keyframes pulse { 0%,100%{opacity:.5}50%{opacity:1} }
+    input, textarea, button, select { font-family:inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="boot"><span style="animation:pulse 1.8s ease-in-out infinite">IT RUNS · booting</span></div>
+
+  <!-- React (UMD) + Babel standalone -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(()=>{});
+      });
+    }
+  </script>
+
+  <!-- App source: NOT auto-run by Babel (type text/plain). Compiled with the
+       classic runtime below so it works as a normal browser script. -->
+  <script type="text/plain" id="appsrc">
+    const { useState, useEffect, useCallback, useRef } = React;
+
+    // ---------- storage (localStorage) ----------
+    const KEY = "it-runs-template-v1";
+    const load = () => { try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : null; } catch(e){ return null; } };
+    const persist = (d) => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} };
+
+    const uid = (p) => (p||"id") + "-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,6);
+
+    // ---------- UI strings ----------
+    const LANG = {
+      zh: {
+        tabs:{daily:"每日",weekly:"每週",monthly:"每月"}, of:"/", toggle:"EN",
+        systems:"我的模組", running:"運行中", addModule:"＋ 新模組", addTask:"＋ 新任務",
+        edit:"編輯", save:"儲存", cancel:"取消", del:"刪除", delAsk:"刪除這一項?",
+        name:"名稱", detail:"說明(選填)", color:"顏色", icon:"圖示", linkModule:"關聯模組", none:"無",
+        reset:"重置勾選", resetExample:"回到範例", resetExampleAsk:"這會清空你目前的所有內容,換回範例。確定嗎?",
+        command:"寫下一個指令 / 念頭…", run:"記錄", commandLog:"指令紀錄", clearAll:"清除全部",
+        reminderDefault:"11:11 每日喚醒", focus:"▶ 專注時段", focusActive:"進行中", min:"分鐘",
+        copy:"複製", paste:"貼上", saveFile:"存成檔案", loadFile:"讀取檔案",
+        copied:"已複製到剪貼簿 ✓", imported:"匯入成功 ✓", failed:"格式不正確,匯入失敗",
+        editConsole:"標題設定", titleLabel:"控制台名稱", subtitleLabel:"副標", reminderLabel:"每日提醒文字", focusLabel:"專注時段(分鐘)",
+        placeholderTaskTitle:"要做的事…", placeholderModuleName:"模組名稱…",
+        empty:"還沒有任何任務。按「＋ 新任務」開始,或在上面建立你的模組。",
+        about:"這是一個空白的「執行台」。下面是範例 — 把它們改成你自己的模組與每日/每週/每月任務,或整個刪掉重寫。所有資料只存在你這台裝置上;用「存成檔案」就能備份或換裝置。",
+        help:"使用說明", close:"關閉",
+        footer1:"你的版本", footer2:"IT RUNS · IT RUNS"
+      },
+      en: {
+        tabs:{daily:"Daily",weekly:"Weekly",monthly:"Monthly"}, of:"/", toggle:"中",
+        systems:"My Modules", running:"running", addModule:"＋ Module", addTask:"＋ Task",
+        edit:"Edit", save:"Save", cancel:"Cancel", del:"Delete", delAsk:"Delete this item?",
+        name:"Name", detail:"Notes (optional)", color:"Color", icon:"Icon", linkModule:"Linked module", none:"None",
+        reset:"Reset checks", resetExample:"Reset to example", resetExampleAsk:"This clears everything you have now and restores the example. Sure?",
+        command:"Write an instruction / thought…", run:"Log", commandLog:"Command Log", clearAll:"Clear all",
+        reminderDefault:"11:11 Daily Wake", focus:"▶ Focus Session", focusActive:"in session", min:"min",
+        copy:"Copy", paste:"Paste", saveFile:"Save to file", loadFile:"Load file",
+        copied:"Copied to clipboard ✓", imported:"Import successful ✓", failed:"Invalid format, import failed",
+        editConsole:"Title settings", titleLabel:"Console name", subtitleLabel:"Subtitle", reminderLabel:"Daily reminder text", focusLabel:"Focus session (minutes)",
+        placeholderTaskTitle:"What to do…", placeholderModuleName:"Module name…",
+        empty:"No tasks yet. Tap “＋ Task” to start, or create a module above.",
+        about:"This is a blank “console.” The items below are examples — edit them into your own modules and daily / weekly / monthly tasks, or delete and rewrite everything. All data stays on this device only; use “Save to file” to back up or move devices.",
+        help:"How to use", close:"Close",
+        footer1:"your version", footer2:"IT RUNS · IT RUNS"
+      }
+    };
+
+    const PALETTE = ["#2D8659","#5AAF6A","#3A9E8F","#5B9EAF","#7B6BA5","#C06070","#B8860B","#A0793D","#8a3a2a","#6b8f6e"];
+    const ICONS = ["△","◇","◎","◆","◈","●","○","★","✦","✶","❖","◐","♦","✺","❀","✧"];
+
+    // ---------- starter / example content ----------
+    const STARTER = {
+      zh: {
+        settings:{ title:"IT RUNS", subtitle:"我的控制台", reminder:"11:11 每日喚醒", focusMin:10 },
+        modules:[
+          { id:"m_body", name:"身體", detail:"睡眠、運動、飲食、休息。", color:"#5AAF6A", icon:"●" },
+          { id:"m_mind", name:"心智", detail:"專注、學習、情緒、靜心。", color:"#7B6BA5", icon:"◇" },
+          { id:"m_work", name:"工作", detail:"專案、收入、創造、產出。", color:"#B8860B", icon:"◆" },
+          { id:"m_rel",  name:"關係", detail:"家人、朋友、社群、愛。", color:"#C06070", icon:"◈" }
+        ],
+        tasks:{
+          daily:[
+            { id:"d1", title:"醒來喝一杯水", detail:"起床後第一件事。", moduleId:"m_body" },
+            { id:"d2", title:"動一動身體 10 分鐘", detail:"散步、伸展、任何形式都好。", moduleId:"m_body" },
+            { id:"d3", title:"寫下今天最重要的一件事", detail:"", moduleId:"m_work" },
+            { id:"d4", title:"靜心 / 深呼吸 3 分鐘", detail:"", moduleId:"m_mind" }
+          ],
+          weekly:[
+            { id:"w1", title:"回顧這一週", detail:"什麼有效?什麼想調整?", moduleId:"m_mind" },
+            { id:"w2", title:"整理生活空間", detail:"", moduleId:"m_body" },
+            { id:"w3", title:"聯絡一個在乎的人", detail:"", moduleId:"m_rel" }
+          ],
+          monthly:[
+            { id:"mo1", title:"這個月的回顧", detail:"記錄完成的事與學到的東西。", moduleId:"m_work" },
+            { id:"mo2", title:"設定下個月的意圖", detail:"", moduleId:"m_mind" }
+          ]
+        }
+      },
+      en: {
+        settings:{ title:"IT RUNS", subtitle:"My Console", reminder:"11:11 Daily Wake", focusMin:10 },
+        modules:[
+          { id:"m_body", name:"Body", detail:"Sleep, movement, food, rest.", color:"#5AAF6A", icon:"●" },
+          { id:"m_mind", name:"Mind", detail:"Focus, learning, emotion, stillness.", color:"#7B6BA5", icon:"◇" },
+          { id:"m_work", name:"Work", detail:"Projects, income, creation, output.", color:"#B8860B", icon:"◆" },
+          { id:"m_rel",  name:"Relationships", detail:"Family, friends, community, love.", color:"#C06070", icon:"◈" }
+        ],
+        tasks:{
+          daily:[
+            { id:"d1", title:"Drink a glass of water on waking", detail:"First thing after you get up.", moduleId:"m_body" },
+            { id:"d2", title:"Move your body 10 minutes", detail:"Walk, stretch, anything counts.", moduleId:"m_body" },
+            { id:"d3", title:"Write down today's one most important thing", detail:"", moduleId:"m_work" },
+            { id:"d4", title:"Meditate / breathe 3 minutes", detail:"", moduleId:"m_mind" }
+          ],
+          weekly:[
+            { id:"w1", title:"Review the week", detail:"What worked? What to adjust?", moduleId:"m_mind" },
+            { id:"w2", title:"Tidy your space", detail:"", moduleId:"m_body" },
+            { id:"w3", title:"Reach out to someone you care about", detail:"", moduleId:"m_rel" }
+          ],
+          monthly:[
+            { id:"mo1", title:"Monthly review", detail:"Log what you finished and what you learned.", moduleId:"m_work" },
+            { id:"mo2", title:"Set intentions for next month", detail:"", moduleId:"m_mind" }
+          ]
+        }
+      }
+    };
+
+    const freshState = (lang) => {
+      const s = JSON.parse(JSON.stringify(STARTER[lang] || STARTER.zh));
+      return { settings:s.settings, modules:s.modules, tasks:s.tasks, checked:{}, commands:[], lang };
+    };
+
+    // ---------- date keys ----------
+    const getDateKey  = () => new Date().toISOString().split("T")[0];
+    const getWeekKey  = () => { const d=new Date(),s=new Date(d.getFullYear(),0,1); return d.getFullYear()+"-W"+Math.ceil(((d-s)/86400000+s.getDay()+1)/7); };
+    const getMonthKey = () => { const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1); };
+
+    function App() {
+      const initial = load() || freshState("zh");
+      const [settings,setSettings] = useState(initial.settings || STARTER.zh.settings);
+      const [modules,setModules]   = useState(initial.modules || []);
+      const [tasks,setTasks]       = useState(initial.tasks || {daily:[],weekly:[],monthly:[]});
+      const [checked,setChecked]   = useState(initial.checked || {});
+      const [commands,setCommands] = useState(initial.commands || []);
+      const [lang,setLang]         = useState(initial.lang || "zh");
+
+      const [tab,setTab]       = useState("daily");
+      const [cmdInput,setCmd]  = useState("");
+      const [pulse,setPulse]   = useState(true);
+      const [showSys,setShowSys] = useState(true);
+      const [expMod,setExpMod] = useState(null);
+      const [expTask,setExpTask] = useState(null);
+      const [focusT,setFocusT] = useState(0);
+      const [ioMsg,setIoMsg]   = useState("");
+      const [editor,setEditor] = useState(null);   // {kind, data, isNew}
+      const [showHelp,setShowHelp] = useState(false);
+
+      const fileRef = useRef(null);
+      const t = LANG[lang];
+
+      // single source of truth: persist whenever core data changes
+      useEffect(()=>{ persist({settings,modules,tasks,checked,commands,lang}); },
+        [settings,modules,tasks,checked,commands,lang]);
+
+      useEffect(()=>{ const i=setInterval(()=>setPulse(p=>!p),2000); return ()=>clearInterval(i); },[]);
+      useEffect(()=>{ if(focusT>0){ const x=setTimeout(()=>setFocusT(s=>s-1),1000); return ()=>clearTimeout(x);} },[focusT]);
+      useEffect(()=>{ if(ioMsg){ const x=setTimeout(()=>setIoMsg(""),3000); return ()=>clearTimeout(x);} },[ioMsg]);
+
+      const pk = tab==="daily"?getDateKey():tab==="weekly"?getWeekKey():getMonthKey();
+      const list = tasks[tab] || [];
+      const chk = (id)=>!!checked[pk+"-"+id];
+      const tog = (id)=>setChecked(c=>({...c,[pk+"-"+id]:!c[pk+"-"+id]}));
+      const done = list.filter(x=>chk(x.id)).length;
+      const total = list.length;
+      const modColor = (id)=> (modules.find(m=>m.id===id)||{}).color || "#8faa82";
+
+      // ----- commands -----
+      const addCmd = ()=>{ const v=cmdInput.trim(); if(!v)return; setCommands(c=>[{id:uid("c"),text:v,time:new Date().toLocaleString()},...c].slice(0,50)); setCmd(""); };
+      const delCmd = (id)=>setCommands(c=>c.filter(x=>x.id!==id));
+
+      // ----- reset / example -----
+      const resetChecks = ()=>setChecked(c=>{ const n={...c}; list.forEach(x=>delete n[pk+"-"+x.id]); return n; });
+      const resetExample = ()=>{ if(!confirm(t.resetExampleAsk))return; const s=freshState(lang); setSettings(s.settings);setModules(s.modules);setTasks(s.tasks);setChecked({});setCommands([]); setIoMsg(t.imported); };
+
+      // ----- import / export -----
+      const snapshot = ()=>({version:"it-runs-template-v1",exportDate:new Date().toISOString(),settings,modules,tasks,checked,commands,lang});
+      const applyImport = (d)=>{ if(!d||!d.version) throw new Error("bad");
+        setSettings(d.settings||STARTER.zh.settings); setModules(d.modules||[]);
+        setTasks(d.tasks||{daily:[],weekly:[],monthly:[]}); setChecked(d.checked||{});
+        setCommands(d.commands||[]); if(d.lang)setLang(d.lang); setIoMsg(t.imported); };
+      const copyOut = async ()=>{ const s=JSON.stringify(snapshot());
+        try{ await navigator.clipboard.writeText(s); setIoMsg(t.copied); }
+        catch(e){ const ta=document.createElement("textarea");ta.value=s;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setIoMsg(t.copied); } };
+      const pasteIn = ()=>{ const v=prompt(t.paste+":"); if(!v)return; try{ applyImport(JSON.parse(v)); }catch(e){ setIoMsg(t.failed); } };
+      const saveFile = ()=>{ const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"});
+        const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="it-runs-"+getDateKey()+".json"; a.click(); URL.revokeObjectURL(url); };
+      const onFile = (e)=>{ const f=e.target.files&&e.target.files[0]; if(!f)return; const r=new FileReader();
+        r.onload=()=>{ try{ applyImport(JSON.parse(r.result)); }catch(err){ setIoMsg(t.failed); } }; r.readAsText(f); e.target.value=""; };
+
+      // ----- editor (modules / tasks / console) -----
+      const openModule = (m)=> setEditor({kind:"module", isNew:!m, data: m ? {...m} : {id:uid("m"),name:"",detail:"",color:PALETTE[modules.length%PALETTE.length],icon:ICONS[modules.length%ICONS.length]}});
+      const openTask   = (task)=> setEditor({kind:"task", isNew:!task, data: task ? {...task} : {id:uid("t"),title:"",detail:"",moduleId:(modules[0]||{}).id||null}});
+      const openConsole= ()=> setEditor({kind:"console", isNew:false, data:{...settings}});
+      const setField = (k,v)=> setEditor(ed=>({...ed,data:{...ed.data,[k]:v}}));
+
+      const saveEditor = ()=>{
+        const {kind,isNew,data} = editor;
+        if(kind==="module"){
+          if(!data.name.trim()) return;
+          setModules(ms=> isNew ? [...ms,data] : ms.map(m=>m.id===data.id?data:m));
+        } else if(kind==="task"){
+          if(!data.title.trim()) return;
+          setTasks(ts=>{ const arr=ts[tab]||[]; return {...ts,[tab]: isNew ? [...arr,data] : arr.map(x=>x.id===data.id?data:x)}; });
+        } else if(kind==="console"){
+          setSettings({...data, focusMin:Math.max(1,parseInt(data.focusMin,10)||10)});
+        }
+        setEditor(null);
+      };
+      const deleteFromEditor = ()=>{
+        const {kind,data} = editor;
+        if(kind==="module"){ if(!confirm(t.delAsk))return; setModules(ms=>ms.filter(m=>m.id!==data.id)); setTasks(ts=>{ const n={}; ["daily","weekly","monthly"].forEach(k=>{ n[k]=(ts[k]||[]).map(x=> x.moduleId===data.id ? {...x,moduleId:null} : x); }); return n; }); }
+        else if(kind==="task"){ if(!confirm(t.delAsk))return; setTasks(ts=>({...ts,[tab]:(ts[tab]||[]).filter(x=>x.id!==data.id)})); setChecked(c=>{ const n={...c}; delete n[pk+"-"+data.id]; return n; }); }
+        setEditor(null);
+      };
+
+      const hh = new Date().getHours().toString().padStart(2,"0");
+      const mi = new Date().getMinutes().toString().padStart(2,"0");
+      const reminder = settings.reminder || t.reminderDefault;
+      const focusMin = settings.focusMin || 10;
+
+      const bg = "linear-gradient(170deg, #e8f5e9 0%, #f1f8e9 30%, #fefef6 60%, #faf6ee 100%)";
+      const card = { background:"rgba(255,255,255,0.6)", border:"1px solid rgba(45,134,89,0.12)", backdropFilter:"blur(8px)" };
+      const pill = { background:"rgba(45,134,89,0.08)", border:"1px solid rgba(45,134,89,0.2)", color:"#2D8659", borderRadius:6, cursor:"pointer" };
+
+      return (
+        <div style={{minHeight:"100vh",background:bg,color:"#2c3e2d",fontFamily:"'Georgia','Noto Serif TC',serif",maxWidth:"100vw"}}>
+          <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,opacity:0.35,
+            background:"radial-gradient(ellipse at 20% 80%, rgba(139,195,130,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(184,134,11,0.08) 0%, transparent 50%)"}} />
+
+          <div style={{position:"relative",zIndex:1,maxWidth:480,margin:"0 auto",padding:"24px 18px 80px"}}>
+
+            {/* Header */}
+            <header style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:18}}>
+              <button onClick={openConsole} title={t.editConsole} style={{background:"transparent",border:"none",cursor:"pointer",textAlign:"left",padding:0}}>
+                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                  <span style={{display:"inline-block",width:9,height:9,borderRadius:"50%",
+                    background:pulse?"#5AAF6A":"#8BC98E",
+                    boxShadow:pulse?"0 0 14px rgba(90,175,106,0.5)":"0 0 6px rgba(90,175,106,0.2)",transition:"all 1.8s ease"}} />
+                  <h1 style={{fontSize:26,fontWeight:400,letterSpacing:6,margin:0,color:"#2D8659"}}>{settings.title||"IT RUNS"}</h1>
+                </div>
+                <p style={{fontSize:11,letterSpacing:3,color:"#6b8f6e",margin:"6px 0 0 21px"}}>{settings.subtitle||""} ✎</p>
+              </button>
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={()=>setShowHelp(true)} style={{...pill,padding:"4px 11px",fontSize:12,letterSpacing:1}}>?</button>
+                <button onClick={()=>setLang(lang==="zh"?"en":"zh")} style={{...pill,padding:"4px 14px",fontSize:12,letterSpacing:2}}>{t.toggle}</button>
+              </div>
+            </header>
+
+            {/* clock / reminder */}
+            <div style={{textAlign:"center",padding:"6px 0",marginBottom:18,fontSize:11,letterSpacing:4,color:"#8faa82"}}>
+              {hh}:{mi} — {reminder}
+            </div>
+
+            {/* focus session */}
+            <button onClick={()=>{ if(focusT===0) setFocusT(focusMin*60); }} style={{width:"100%",padding:"14px 16px",marginBottom:16,cursor:focusT===0?"pointer":"default",
+              background:focusT>0?"rgba(90,175,106,0.12)":"rgba(255,255,255,0.5)",
+              border:focusT>0?"1.5px solid #5AAF6A":"1px solid rgba(45,134,89,0.15)",
+              borderRadius:10,display:"flex",justifyContent:"center",alignItems:"center",gap:10,backdropFilter:"blur(8px)",transition:"all 0.5s"}}>
+              {focusT>0 ? (
+                <div style={{display:"flex",alignItems:"center",gap:10}}>
+                  <span style={{display:"inline-block",width:8,height:8,borderRadius:"50%",background:"#5AAF6A",animation:"pulse 2s ease-in-out infinite",boxShadow:"0 0 12px rgba(90,175,106,0.5)"}} />
+                  <span style={{fontSize:13,color:"#2D8659",fontWeight:600,letterSpacing:2}}>{t.focusActive} · {Math.floor(focusT/60)}:{(focusT%60).toString().padStart(2,"0")}</span>
+                </div>
+              ) : (
+                <span style={{fontSize:12,color:"#2D8659",letterSpacing:3,opacity:0.8}}>{t.focus} · {focusMin} {t.min}</span>
+              )}
+            </button>
+
+            {/* modules */}
+            <button onClick={()=>setShowSys(!showSys)} style={{width:"100%",...card,
+              borderRadius:showSys?"10px 10px 0 0":"10px",padding:"13px 16px",marginBottom:showSys?0:16,cursor:"pointer",
+              display:"flex",justifyContent:"space-between",alignItems:"center",color:"#2c3e2d"}}>
+              <span style={{fontSize:11,letterSpacing:2,color:"#6b8f6e"}}>{t.systems}</span>
+              <div style={{display:"flex",gap:6,alignItems:"center"}}>
+                {modules.map(m=><span key={m.id} style={{display:"inline-block",width:7,height:7,borderRadius:"50%",background:m.color,opacity:0.7}} />)}
+                <span style={{fontSize:10,color:"#8faa82",marginLeft:4}}>{showSys?"▲":"▼"}</span>
+              </div>
+            </button>
+            {showSys&&<div style={{background:"rgba(255,255,255,0.5)",border:"1px solid rgba(45,134,89,0.12)",borderTop:"none",borderRadius:"0 0 10px 10px",padding:"4px 14px 12px",marginBottom:16,backdropFilter:"blur(8px)"}}>
+              {modules.map(m=><div key={m.id}>
+                <div style={{display:"flex",alignItems:"center",gap:8,padding:"11px 4px",borderBottom:"1px solid rgba(45,134,89,0.06)"}}>
+                  <button onClick={()=>setExpMod(expMod===m.id?null:m.id)} style={{flex:1,display:"flex",alignItems:"center",gap:12,background:"transparent",border:"none",cursor:"pointer",textAlign:"left",padding:0}}>
+                    <span style={{color:m.color,fontSize:15,width:22,textAlign:"center"}}>{m.icon}</span>
+                    <span style={{flex:1,fontSize:13,color:"#2c3e2d",fontWeight:500}}>{m.name}</span>
+                    <span style={{fontSize:9,letterSpacing:1,color:m.color,opacity:0.6}}>{t.running}</span>
+                  </button>
+                  <button onClick={()=>openModule(m)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:13,cursor:"pointer",padding:"0 4px"}}>✎</button>
+                  <button onClick={()=>setExpMod(expMod===m.id?null:m.id)} style={{background:"transparent",border:"none",color:"#8faa82",fontSize:11,cursor:"pointer",width:14,padding:0}}>{expMod===m.id?"−":"+"}</button>
+                </div>
+                {expMod===m.id&&m.detail&&<div style={{padding:"8px 10px 12px 38px",fontSize:12,lineHeight:2,color:"#5a7a5c",whiteSpace:"pre-line"}}>{m.detail}</div>}
+              </div>)}
+              <button onClick={()=>openModule(null)} style={{marginTop:10,width:"100%",...pill,padding:"8px 0",fontSize:11,letterSpacing:2,fontWeight:500}}>{t.addModule}</button>
+            </div>}
+
+            {/* progress */}
+            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,padding:"0 4px"}}>
+              <div style={{flex:1,height:3,background:"rgba(45,134,89,0.1)",borderRadius:2,overflow:"hidden"}}>
+                <div style={{height:"100%",background:"linear-gradient(90deg,#5AAF6A,#B8860B)",width:(total?(done/total)*100:0)+"%",transition:"width 0.5s",borderRadius:2}} />
+              </div>
+              <span style={{fontSize:11,color:"#6b8f6e",letterSpacing:1,minWidth:36,textAlign:"right"}}>{done}{t.of}{total}</span>
+            </div>
+
+            {/* tabs */}
+            <div style={{display:"flex",marginBottom:18,borderBottom:"1px solid rgba(45,134,89,0.1)"}}>
+              {["daily","weekly","monthly"].map(tb=><button key={tb} onClick={()=>{setTab(tb);setExpTask(null);}} style={{
+                flex:1,padding:"10px 0",background:"transparent",border:"none",
+                color:tab===tb?"#2D8659":"#a0b89e",fontWeight:tab===tb?600:400,
+                borderBottom:tab===tb?"2px solid #2D8659":"2px solid transparent",
+                fontSize:12,letterSpacing:3,cursor:"pointer",transition:"all 0.3s"}}>{t.tabs[tb]}</button>)}
+            </div>
+
+            {/* tasks */}
+            <div style={{marginBottom:24}}>
+              {list.length===0 && <div style={{padding:"22px 10px",textAlign:"center",fontSize:12,lineHeight:1.9,color:"#8faa82"}}>{t.empty}</div>}
+              {list.map(task=>{
+                const d=chk(task.id), c=modColor(task.moduleId), o=expTask===task.id;
+                return <div key={task.id} style={{borderBottom:"1px solid rgba(45,134,89,0.06)"}}>
+                  <div style={{display:"flex",alignItems:"flex-start",gap:11,padding:"13px 8px",background:d?"rgba(90,175,106,0.06)":"transparent",transition:"background 0.3s"}}>
+                    <button onClick={()=>tog(task.id)} style={{width:20,height:20,borderRadius:4,flexShrink:0,marginTop:1,cursor:"pointer",
+                      border:d?"1.5px solid #5AAF6A":"1.5px solid rgba(45,134,89,0.2)",
+                      background:d?"rgba(90,175,106,0.15)":"rgba(255,255,255,0.5)",
+                      display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.3s",padding:0}}>
+                      {d&&<span style={{color:"#2D8659",fontSize:12,fontWeight:700}}>✓</span>}
+                    </button>
+                    <button onClick={()=> task.detail ? setExpTask(o?null:task.id) : openTask(task)} style={{flex:1,background:"transparent",border:"none",cursor:"pointer",textAlign:"left",padding:0}}>
+                      <div style={{fontSize:13.5,lineHeight:1.6,color:d?"#5AAF6A":"#2c3e2d",textDecoration:d?"line-through":"none",opacity:d?0.55:1,transition:"all 0.3s",fontWeight:d?400:500,wordBreak:"break-word"}}>{task.title}</div>
+                    </button>
+                    <button onClick={()=>openTask(task)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:13,cursor:"pointer",padding:"0 2px",marginTop:3,flexShrink:0}}>✎</button>
+                    <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0,marginTop:5}}>
+                      <span style={{width:6,height:6,borderRadius:"50%",background:c,opacity:0.6}} />
+                      {task.detail&&<span style={{fontSize:10,color:"#8faa82"}}>{o?"−":"+"}</span>}
+                    </div>
+                  </div>
+                  {o&&task.detail&&<div style={{padding:"8px 14px 16px 43px",fontSize:12,lineHeight:2.1,color:"#5a7a5c",borderLeft:"2px solid "+c+"44",marginLeft:8,whiteSpace:"pre-line"}}>{task.detail}</div>}
+                </div>;
+              })}
+              <button onClick={()=>openTask(null)} style={{marginTop:14,width:"100%",...pill,padding:"9px 0",fontSize:11,letterSpacing:2,fontWeight:500}}>{t.addTask}</button>
+            </div>
+
+            {/* reset row */}
+            <div style={{textAlign:"center",marginBottom:32,display:"flex",gap:10,justifyContent:"center"}}>
+              <button onClick={resetChecks} style={{background:"rgba(255,255,255,0.5)",border:"1px solid rgba(45,134,89,0.1)",color:"#6b8f6e",padding:"7px 22px",borderRadius:6,fontSize:10,cursor:"pointer",letterSpacing:2}}>{t.reset}</button>
+              <button onClick={resetExample} style={{background:"rgba(255,255,255,0.5)",border:"1px solid rgba(45,134,89,0.1)",color:"#6b8f6e",padding:"7px 22px",borderRadius:6,fontSize:10,cursor:"pointer",letterSpacing:2}}>{t.resetExample}</button>
+            </div>
+
+            <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.15),rgba(184,134,11,0.12),transparent)",marginBottom:24}} />
+
+            {/* command input */}
+            <div style={{display:"flex",gap:8,marginBottom:18}}>
+              <input type="text" value={cmdInput} onChange={e=>setCmd(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCmd()} placeholder={t.command}
+                style={{flex:1,background:"rgba(255,255,255,0.7)",border:"1px solid rgba(45,134,89,0.15)",borderRadius:8,padding:"12px 14px",color:"#2c3e2d",fontSize:13,outline:"none",backdropFilter:"blur(4px)"}} />
+              <button onClick={addCmd} style={{...pill,padding:"0 20px",fontSize:11,letterSpacing:3,fontWeight:600,whiteSpace:"nowrap"}}>{t.run}</button>
+            </div>
+            {commands.length>0&&<div style={{marginBottom:8}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                <span style={{fontSize:10,letterSpacing:3,color:"#8faa82"}}>{t.commandLog}</span>
+                <button onClick={()=>setCommands([])} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:9,cursor:"pointer",letterSpacing:1}}>{t.clearAll}</button>
+              </div>
+              {commands.slice(0,15).map(cmd=><div key={cmd.id} style={{padding:"9px 0",borderBottom:"1px solid rgba(45,134,89,0.05)",display:"flex",alignItems:"flex-start",gap:8}}>
+                <div style={{flex:1}}>
+                  <div style={{color:"#8faa82",fontSize:9,marginBottom:3,letterSpacing:1}}>{cmd.time}</div>
+                  <div style={{color:"#3e5e40",fontSize:12,lineHeight:1.5}}><span style={{color:"#B8860B",opacity:0.5}}>→ </span>{cmd.text}</div>
+                </div>
+                <button onClick={()=>delCmd(cmd.id)} style={{background:"transparent",border:"none",color:"#a0b89e",fontSize:16,cursor:"pointer",padding:"0 4px",lineHeight:1}}>×</button>
+              </div>)}
+            </div>}
+
+            {/* data: clipboard + file */}
+            <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.1),transparent)",margin:"8px 0 18px"}} />
+            <div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap"}}>
+              {[[t.saveFile,saveFile],[t.loadFile,()=>fileRef.current&&fileRef.current.click()],[t.copy,copyOut],[t.paste,pasteIn]].map(([label,fn])=>(
+                <button key={label} onClick={fn} style={{flex:"1 1 40%",padding:"10px 0",...card,borderRadius:8,color:"#2D8659",fontSize:11,cursor:"pointer",letterSpacing:2,fontWeight:500}}>{label}</button>
+              ))}
+              <input ref={fileRef} type="file" accept="application/json,.json" onChange={onFile} style={{display:"none"}} />
+            </div>
+            {ioMsg&&<div style={{textAlign:"center",fontSize:11,color:"#5AAF6A",letterSpacing:1,marginBottom:8}}>{ioMsg}</div>}
+
+            {/* footer */}
+            <div style={{marginTop:48,textAlign:"center",lineHeight:2.6}}>
+              <div style={{fontSize:11,letterSpacing:5,color:"#5a7a5c"}}>{t.footer1}</div>
+              <div style={{fontSize:10,letterSpacing:6,color:"#B8860B",opacity:0.8}}>{t.footer2}</div>
+            </div>
+          </div>
+
+          {/* ---------- editor modal ---------- */}
+          {editor&&<Modal onClose={()=>setEditor(null)}>
+            {editor.kind==="console"&&<div>
+              <Field label={t.titleLabel}><Inp value={editor.data.title} onChange={v=>setField("title",v)} /></Field>
+              <Field label={t.subtitleLabel}><Inp value={editor.data.subtitle} onChange={v=>setField("subtitle",v)} /></Field>
+              <Field label={t.reminderLabel}><Inp value={editor.data.reminder} onChange={v=>setField("reminder",v)} /></Field>
+              <Field label={t.focusLabel}><Inp type="number" value={editor.data.focusMin} onChange={v=>setField("focusMin",v)} /></Field>
+            </div>}
+
+            {editor.kind==="module"&&<div>
+              <Field label={t.name}><Inp value={editor.data.name} onChange={v=>setField("name",v)} placeholder={t.placeholderModuleName} /></Field>
+              <Field label={t.detail}><Area value={editor.data.detail} onChange={v=>setField("detail",v)} /></Field>
+              <Field label={t.icon}>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                  {ICONS.map(ic=><button key={ic} onClick={()=>setField("icon",ic)} style={{width:34,height:34,borderRadius:6,cursor:"pointer",fontSize:15,
+                    border:editor.data.icon===ic?"1.5px solid #2D8659":"1px solid rgba(45,134,89,0.18)",
+                    background:editor.data.icon===ic?"rgba(45,134,89,0.12)":"rgba(255,255,255,0.6)",color:editor.data.color}}>{ic}</button>)}
+                </div>
+              </Field>
+              <Field label={t.color}>
+                <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+                  {PALETTE.map(col=><button key={col} onClick={()=>setField("color",col)} style={{width:30,height:30,borderRadius:"50%",cursor:"pointer",background:col,
+                    border:editor.data.color===col?"3px solid #2c3e2d":"3px solid rgba(255,255,255,0.6)",boxShadow:"0 0 0 1px rgba(0,0,0,0.05)"}} />)}
+                </div>
+              </Field>
+            </div>}
+
+            {editor.kind==="task"&&<div>
+              <Field label={t.tabs[tab]}><Inp value={editor.data.title} onChange={v=>setField("title",v)} placeholder={t.placeholderTaskTitle} /></Field>
+              <Field label={t.detail}><Area value={editor.data.detail} onChange={v=>setField("detail",v)} /></Field>
+              <Field label={t.linkModule}>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                  <button onClick={()=>setField("moduleId",null)} style={chipStyle(editor.data.moduleId==null,"#8faa82")}>{t.none}</button>
+                  {modules.map(m=><button key={m.id} onClick={()=>setField("moduleId",m.id)} style={chipStyle(editor.data.moduleId===m.id,m.color)}>
+                    <span style={{color:m.color,marginRight:5}}>{m.icon}</span>{m.name}
+                  </button>)}
+                </div>
+              </Field>
+            </div>}
+
+            <div style={{display:"flex",gap:10,marginTop:22,alignItems:"center"}}>
+              {!editor.isNew&&editor.kind!=="console"&&<button onClick={deleteFromEditor} style={{background:"transparent",border:"none",color:"#c06070",fontSize:12,cursor:"pointer",letterSpacing:1,marginRight:"auto"}}>{t.del}</button>}
+              <button onClick={()=>setEditor(null)} style={{marginLeft:editor.isNew||editor.kind==="console"?"auto":0,background:"transparent",border:"1px solid rgba(45,134,89,0.2)",color:"#6b8f6e",padding:"9px 18px",borderRadius:7,fontSize:12,cursor:"pointer",letterSpacing:1}}>{t.cancel}</button>
+              <button onClick={saveEditor} style={{background:"#2D8659",border:"none",color:"#fff",padding:"9px 22px",borderRadius:7,fontSize:12,cursor:"pointer",letterSpacing:2,fontWeight:600}}>{t.save}</button>
+            </div>
+          </Modal>}
+
+          {/* ---------- help modal ---------- */}
+          {showHelp&&<Modal onClose={()=>setShowHelp(false)}>
+            <div style={{fontSize:13.5,lineHeight:2,color:"#3e5e40",whiteSpace:"pre-line",marginBottom:18}}>{t.about}</div>
+            <button onClick={()=>setShowHelp(false)} style={{width:"100%",background:"#2D8659",border:"none",color:"#fff",padding:"11px 0",borderRadius:8,fontSize:12,cursor:"pointer",letterSpacing:2,fontWeight:600}}>{t.close}</button>
+          </Modal>}
+        </div>
+      );
+    }
+
+    // ---------- small presentational helpers ----------
+    function Modal({children,onClose}){
+      return (
+        <div onClick={onClose} style={{position:"fixed",inset:0,zIndex:50,background:"rgba(30,45,32,0.34)",backdropFilter:"blur(3px)",display:"flex",alignItems:"flex-end",justifyContent:"center"}}>
+          <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:480,maxHeight:"88vh",overflowY:"auto",
+            background:"linear-gradient(170deg,#fefef8,#f4faf0)",borderRadius:"18px 18px 0 0",
+            padding:"22px 20px calc(26px + env(safe-area-inset-bottom))",boxShadow:"0 -8px 40px rgba(45,134,89,0.18)"}}>
+            <div style={{width:38,height:4,borderRadius:2,background:"rgba(45,134,89,0.2)",margin:"0 auto 18px"}} />
+            {children}
+          </div>
+        </div>
+      );
+    }
+    function Field({label,children}){
+      return <div style={{marginBottom:16}}>
+        <div style={{fontSize:10,letterSpacing:2,color:"#8faa82",marginBottom:7,textTransform:"uppercase"}}>{label}</div>
+        {children}
+      </div>;
+    }
+    function Inp({value,onChange,placeholder,type}){
+      return <input type={type||"text"} value={value==null?"":value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}
+        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,0.8)",border:"1px solid rgba(45,134,89,0.18)",borderRadius:8,padding:"11px 13px",color:"#2c3e2d",fontSize:14,outline:"none"}} />;
+    }
+    function Area({value,onChange}){
+      return <textarea value={value==null?"":value} onChange={e=>onChange(e.target.value)} rows={3}
+        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,0.8)",border:"1px solid rgba(45,134,89,0.18)",borderRadius:8,padding:"11px 13px",color:"#2c3e2d",fontSize:13.5,lineHeight:1.7,outline:"none",resize:"vertical"}} />;
+    }
+    function chipStyle(active,color){
+      return {display:"inline-flex",alignItems:"center",padding:"7px 13px",borderRadius:20,cursor:"pointer",fontSize:12.5,
+        border:active?"1.5px solid "+color:"1px solid rgba(45,134,89,0.18)",
+        background:active?"rgba(45,134,89,0.10)":"rgba(255,255,255,0.6)",color:"#2c3e2d"};
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    const b=document.getElementById("boot"); if(b) b.classList.add("gone");
+  </script>
+
+  <script>
+    // Compile the JSX source with the CLASSIC runtime (React.createElement),
+    // so no ES-module import is injected, then run it.
+    (function(){
+      try {
+        var src = document.getElementById("appsrc").textContent;
+        var compiled = Babel.transform(src, { presets: [["react", { runtime: "classic" }]] }).code;
+        (0, eval)(compiled);
+      } catch (err) {
+        console.error(err);
+        var boot = document.getElementById("boot");
+        if (boot) boot.innerHTML =
+          '<div style="font-family:monospace;font-size:12px;padding:20px;text-align:center;max-width:90%;">' +
+          'load error<br><br>' + String(err).replace(/</g,"&lt;") + '</div>';
+      }
+    })();
+  </script>
+</body>
+</html>
