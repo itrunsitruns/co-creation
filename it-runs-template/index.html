@@ -68,9 +68,9 @@
       zh: {
         tabs:{daily:"每日",weekly:"每週",monthly:"每月"}, of:"/", toggle:"EN",
         systems:"我的模組", running:"運行中", addModule:"＋ 新模組", addTask:"＋ 新任務",
-        edit:"編輯", save:"儲存", cancel:"取消", del:"刪除", delAsk:"刪除這一項?",
+        edit:"編輯", save:"儲存", cancel:"取消", del:"刪除", delAsk:"刪除這一項?", delConfirm:"確定刪除?",
         name:"名稱", detail:"說明(選填)", color:"顏色", icon:"圖示", linkModule:"關聯模組", none:"無",
-        reset:"重置勾選", resetExample:"回到範例", resetExampleAsk:"這會清空你目前的所有內容,換回範例。確定嗎?",
+        reset:"重置勾選", resetExample:"回到範例", resetExampleConfirm:"確定?再按一次",
         command:"寫下一個指令 / 念頭…", run:"記錄", commandLog:"指令紀錄", clearAll:"清除全部",
         reminderDefault:"11:11 每日喚醒", focus:"▶ 專注時段", focusActive:"進行中", min:"分鐘",
         copy:"複製", paste:"貼上", saveFile:"存成檔案", loadFile:"讀取檔案",
@@ -85,9 +85,9 @@
       en: {
         tabs:{daily:"Daily",weekly:"Weekly",monthly:"Monthly"}, of:"/", toggle:"中",
         systems:"My Modules", running:"running", addModule:"＋ Module", addTask:"＋ Task",
-        edit:"Edit", save:"Save", cancel:"Cancel", del:"Delete", delAsk:"Delete this item?",
+        edit:"Edit", save:"Save", cancel:"Cancel", del:"Delete", delAsk:"Delete this item?", delConfirm:"Delete for sure?",
         name:"Name", detail:"Notes (optional)", color:"Color", icon:"Icon", linkModule:"Linked module", none:"None",
-        reset:"Reset checks", resetExample:"Reset to example", resetExampleAsk:"This clears everything you have now and restores the example. Sure?",
+        reset:"Reset checks", resetExample:"Reset to example", resetExampleConfirm:"Sure? Tap again",
         command:"Write an instruction / thought…", run:"Log", commandLog:"Command Log", clearAll:"Clear all",
         reminderDefault:"11:11 Daily Wake", focus:"▶ Focus Session", focusActive:"in session", min:"min",
         copy:"Copy", paste:"Paste", saveFile:"Save to file", loadFile:"Load file",
@@ -188,6 +188,8 @@
       const [focusT,setFocusT] = useState(0);
       const [ioMsg,setIoMsg]   = useState("");
       const [editor,setEditor] = useState(null);   // {kind, data, isNew}
+      const [delArm,setDelArm] = useState(false);  // two-tap delete (native confirm() is blocked in iOS standalone PWA)
+      const [exArm,setExArm]   = useState(false);  // two-tap "reset to example"
       const [showHelp,setShowHelp] = useState(false);
 
       const fileRef = useRef(null);
@@ -200,6 +202,7 @@
       useEffect(()=>{ const i=setInterval(()=>setPulse(p=>!p),2000); return ()=>clearInterval(i); },[]);
       useEffect(()=>{ if(focusT>0){ const x=setTimeout(()=>setFocusT(s=>s-1),1000); return ()=>clearTimeout(x);} },[focusT]);
       useEffect(()=>{ if(ioMsg){ const x=setTimeout(()=>setIoMsg(""),3000); return ()=>clearTimeout(x);} },[ioMsg]);
+      useEffect(()=>{ setDelArm(false); },[editor]);   // re-arm fresh for each opened item
 
       const pk = tab==="daily"?getDateKey():tab==="weekly"?getWeekKey():getMonthKey();
       const list = tasks[tab] || [];
@@ -215,7 +218,7 @@
 
       // ----- reset / example -----
       const resetChecks = ()=>setChecked(c=>{ const n={...c}; list.forEach(x=>delete n[pk+"-"+x.id]); return n; });
-      const resetExample = ()=>{ if(!confirm(t.resetExampleAsk))return; const s=freshState(lang); setSettings(s.settings);setModules(s.modules);setTasks(s.tasks);setChecked({});setCommands([]); setIoMsg(t.imported); };
+      const resetExample = ()=>{ if(!exArm){ setExArm(true); setTimeout(()=>setExArm(false),3500); return; } setExArm(false); const s=freshState(lang); setSettings(s.settings);setModules(s.modules);setTasks(s.tasks);setChecked({});setCommands([]); setIoMsg(t.imported); };
 
       // ----- import / export -----
       const snapshot = ()=>({version:"it-runs-template-v1",exportDate:new Date().toISOString(),settings,modules,tasks,checked,commands,lang});
@@ -226,7 +229,7 @@
       const copyOut = async ()=>{ const s=JSON.stringify(snapshot());
         try{ await navigator.clipboard.writeText(s); setIoMsg(t.copied); }
         catch(e){ const ta=document.createElement("textarea");ta.value=s;document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);setIoMsg(t.copied); } };
-      const pasteIn = ()=>{ const v=prompt(t.paste+":"); if(!v)return; try{ applyImport(JSON.parse(v)); }catch(e){ setIoMsg(t.failed); } };
+      const openPaste = ()=> setEditor({kind:"paste", isNew:false, data:{text:""}});
       const saveFile = ()=>{ const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"});
         const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="it-runs-"+getDateKey()+".json"; a.click(); URL.revokeObjectURL(url); };
       const onFile = (e)=>{ const f=e.target.files&&e.target.files[0]; if(!f)return; const r=new FileReader();
@@ -248,13 +251,15 @@
           setTasks(ts=>{ const arr=ts[tab]||[]; return {...ts,[tab]: isNew ? [...arr,data] : arr.map(x=>x.id===data.id?data:x)}; });
         } else if(kind==="console"){
           setSettings({...data, focusMin:Math.max(1,parseInt(data.focusMin,10)||10)});
+        } else if(kind==="paste"){
+          try{ applyImport(JSON.parse(data.text)); }catch(e){ setIoMsg(t.failed); return; }
         }
         setEditor(null);
       };
       const deleteFromEditor = ()=>{
         const {kind,data} = editor;
-        if(kind==="module"){ if(!confirm(t.delAsk))return; setModules(ms=>ms.filter(m=>m.id!==data.id)); setTasks(ts=>{ const n={}; ["daily","weekly","monthly"].forEach(k=>{ n[k]=(ts[k]||[]).map(x=> x.moduleId===data.id ? {...x,moduleId:null} : x); }); return n; }); }
-        else if(kind==="task"){ if(!confirm(t.delAsk))return; setTasks(ts=>({...ts,[tab]:(ts[tab]||[]).filter(x=>x.id!==data.id)})); setChecked(c=>{ const n={...c}; delete n[pk+"-"+data.id]; return n; }); }
+        if(kind==="module"){ setModules(ms=>ms.filter(m=>m.id!==data.id)); setTasks(ts=>{ const n={}; ["daily","weekly","monthly"].forEach(k=>{ n[k]=(ts[k]||[]).map(x=> x.moduleId===data.id ? {...x,moduleId:null} : x); }); return n; }); }
+        else if(kind==="task"){ setTasks(ts=>({...ts,[tab]:(ts[tab]||[]).filter(x=>x.id!==data.id)})); setChecked(c=>{ const n={...c}; delete n[pk+"-"+data.id]; return n; }); }
         setEditor(null);
       };
 
@@ -385,7 +390,7 @@
             {/* reset row */}
             <div style={{textAlign:"center",marginBottom:32,display:"flex",gap:10,justifyContent:"center"}}>
               <button onClick={resetChecks} style={{background:"rgba(255,255,255,0.5)",border:"1px solid rgba(45,134,89,0.1)",color:"#6b8f6e",padding:"7px 22px",borderRadius:6,fontSize:10,cursor:"pointer",letterSpacing:2}}>{t.reset}</button>
-              <button onClick={resetExample} style={{background:"rgba(255,255,255,0.5)",border:"1px solid rgba(45,134,89,0.1)",color:"#6b8f6e",padding:"7px 22px",borderRadius:6,fontSize:10,cursor:"pointer",letterSpacing:2}}>{t.resetExample}</button>
+              <button onClick={resetExample} style={{background:exArm?"rgba(192,96,112,0.12)":"rgba(255,255,255,0.5)",border:exArm?"1px solid #c06070":"1px solid rgba(45,134,89,0.1)",color:exArm?"#c06070":"#6b8f6e",padding:"7px 22px",borderRadius:6,fontSize:10,cursor:"pointer",letterSpacing:2,transition:"all 0.2s"}}>{exArm?t.resetExampleConfirm:t.resetExample}</button>
             </div>
 
             <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.15),rgba(184,134,11,0.12),transparent)",marginBottom:24}} />
@@ -413,7 +418,7 @@
             {/* data: clipboard + file */}
             <div style={{height:1,background:"linear-gradient(90deg,transparent,rgba(45,134,89,0.1),transparent)",margin:"8px 0 18px"}} />
             <div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap"}}>
-              {[[t.saveFile,saveFile],[t.loadFile,()=>fileRef.current&&fileRef.current.click()],[t.copy,copyOut],[t.paste,pasteIn]].map(([label,fn])=>(
+              {[[t.saveFile,saveFile],[t.loadFile,()=>fileRef.current&&fileRef.current.click()],[t.copy,copyOut],[t.paste,openPaste]].map(([label,fn])=>(
                 <button key={label} onClick={fn} style={{flex:"1 1 40%",padding:"10px 0",...card,borderRadius:8,color:"#2D8659",fontSize:11,cursor:"pointer",letterSpacing:2,fontWeight:500}}>{label}</button>
               ))}
               <input ref={fileRef} type="file" accept="application/json,.json" onChange={onFile} style={{display:"none"}} />
@@ -467,9 +472,14 @@
               </Field>
             </div>}
 
+            {editor.kind==="paste"&&<div>
+              <Field label={t.paste}><Area value={editor.data.text} onChange={v=>setField("text",v)} /></Field>
+            </div>}
+
             <div style={{display:"flex",gap:10,marginTop:22,alignItems:"center"}}>
-              {!editor.isNew&&editor.kind!=="console"&&<button onClick={deleteFromEditor} style={{background:"transparent",border:"none",color:"#c06070",fontSize:12,cursor:"pointer",letterSpacing:1,marginRight:"auto"}}>{t.del}</button>}
-              <button onClick={()=>setEditor(null)} style={{marginLeft:editor.isNew||editor.kind==="console"?"auto":0,background:"transparent",border:"1px solid rgba(45,134,89,0.2)",color:"#6b8f6e",padding:"9px 18px",borderRadius:7,fontSize:12,cursor:"pointer",letterSpacing:1}}>{t.cancel}</button>
+              {(editor.kind==="module"||editor.kind==="task")&&!editor.isNew&&<button onClick={()=> delArm ? deleteFromEditor() : setDelArm(true)} style={{marginRight:"auto",fontSize:12,cursor:"pointer",letterSpacing:1,borderRadius:7,transition:"all 0.2s",
+                ...(delArm ? {background:"#c06070",border:"none",color:"#fff",padding:"9px 16px",fontWeight:600} : {background:"transparent",border:"none",color:"#c06070",padding:"9px 0"})}}>{delArm ? t.delConfirm : t.del}</button>}
+              <button onClick={()=>setEditor(null)} style={{marginLeft:((editor.kind==="module"||editor.kind==="task")&&!editor.isNew)?0:"auto",background:"transparent",border:"1px solid rgba(45,134,89,0.2)",color:"#6b8f6e",padding:"9px 18px",borderRadius:7,fontSize:12,cursor:"pointer",letterSpacing:1}}>{t.cancel}</button>
               <button onClick={saveEditor} style={{background:"#2D8659",border:"none",color:"#fff",padding:"9px 22px",borderRadius:7,fontSize:12,cursor:"pointer",letterSpacing:2,fontWeight:600}}>{t.save}</button>
             </div>
           </Modal>}
