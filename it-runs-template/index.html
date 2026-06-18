@@ -104,6 +104,40 @@
     const PALETTE = ["#2D8659","#5AAF6A","#3A9E8F","#5B9EAF","#7B6BA5","#C06070","#B8860B","#A0793D","#8a3a2a","#6b8f6e"];
     const ICONS = ["△","◇","◎","◆","◈","●","○","★","✦","✶","❖","◐","♦","✺","❀","✧"];
 
+    // ---------- in-app usage guide (bilingual) ----------
+    const HELP = {
+      zh: {
+        title:"使用說明", intro:"一個空白的「執行台」。把生活拆成幾個模組,配上每日 / 每週 / 每月想固定做的事,每天打勾。打開時裡面是範例 — 全部都能改成你自己的,或刪掉重寫。",
+        sections:[
+          { icon:"✎", title:"怎麼開始", body:"每個項目右邊的鉛筆 ✎ 就能編輯,把範例改成你的字。要新增就按清單最下面的「＋ 新任務」或模組區的「＋ 新模組」。" },
+          { icon:"✕", title:"怎麼刪除", body:"點 ✎ 進入編輯,左下角按「刪除」會變成紅色「確定刪除?」,再按一次才真的刪掉(防止誤觸)。" },
+          { icon:"◆", title:"模組是什麼", body:"模組是你生活的幾個面向(身體、工作、關係…),每個可選顏色和圖示。任務可以關聯到某個模組,任務旁的小圓點就是那個模組的顏色,一眼看出屬於哪一塊。" },
+          { icon:"○", title:"每日 · 每週 · 每月", body:"三個分頁各有自己的清單。打勾代表這一輪(今天 / 本週 / 本月)完成,上方進度條會跟著動,並會自動換新一輪。「重置勾選」可手動清掉這一輪的勾。" },
+          { icon:"▶", title:"專注時段", body:"點一下開始倒數(預設 10 分鐘,可在標題設定裡改),陪你安靜做一件事。" },
+          { icon:"→", title:"指令紀錄", body:"下方輸入框可以隨手記下念頭、指令、想做的事,照時間留存,像一本輕量日誌。" },
+          { icon:"✧", title:"改標題與設定", body:"點最上面的標題,可以改控制台名稱、副標、每日提醒文字、專注時段長度。右上角的「中 / EN」可切換語言。" },
+          { icon:"▢", title:"裝成手機 app", body:"iPhone:用 Safari 開啟 → 底部「分享」⬆️ → 「加入主畫面」。Android:Chrome → 右上 ⋮ → 「加到主畫面」。之後就能離線使用,像真的 app 一樣。" },
+          { icon:"⤓", title:"備份與搬家", body:"「存成檔案」把全部內容存成一個 .json 檔(備份 / 換手機用);「讀取檔案」把存出來的檔讀回來(會整個取代目前內容,讀之前先存一份)。旁邊「複製 / 貼上」是輕量版。" },
+          { icon:"🔒", title:"隱私", body:"所有資料只存在你這台裝置的瀏覽器裡,不需要帳號、不上傳、別人看不到。清掉瀏覽器資料前記得先存檔備份。" }
+        ]
+      },
+      en: {
+        title:"How to use", intro:"A blank “console.” Break life into a few modules, pair them with the things you want to do daily / weekly / monthly, and check them off. It opens with examples — change everything to your own, or delete and rewrite.",
+        sections:[
+          { icon:"✎", title:"Getting started", body:"The pencil ✎ on the right of any item lets you edit it — turn the examples into your own words. To add, tap “＋ Task” at the bottom of a list, or “＋ Module” in the modules area." },
+          { icon:"✕", title:"How to delete", body:"Tap ✎ to open an item, then the “Delete” button at the bottom-left turns into a red “Delete for sure?” — tap again to actually remove it (prevents accidental taps)." },
+          { icon:"◆", title:"What modules are", body:"Modules are the few areas of your life (Body, Work, Relationships…), each with its own color and icon. A task can be linked to a module — the little dot beside it shows that module's color, so you see at a glance which area it belongs to." },
+          { icon:"○", title:"Daily · Weekly · Monthly", body:"Three tabs, each with its own list. A check means done for this round (today / this week / this month); the progress bar follows along and resets to a new round automatically. “Reset checks” clears this round's checks manually." },
+          { icon:"▶", title:"Focus session", body:"Tap to start a countdown (10 minutes by default, changeable in the title settings) to quietly do one thing." },
+          { icon:"→", title:"Command log", body:"The input box at the bottom lets you jot down thoughts, instructions, things to do — kept by time, like a lightweight journal." },
+          { icon:"✧", title:"Title & settings", body:"Tap the title at the top to change the console name, subtitle, daily reminder text, and focus-session length. The “中 / EN” button at the top-right switches language." },
+          { icon:"▢", title:"Install as an app", body:"iPhone: open in Safari → Share ⬆️ at the bottom → “Add to Home Screen.” Android: Chrome → ⋮ top-right → “Add to Home Screen.” Then it works offline, just like a real app." },
+          { icon:"⤓", title:"Backup & moving devices", body:"“Save to file” saves everything as a .json file (for backup / a new phone); “Load file” reads a saved file back in (this replaces everything — save first). “Copy / Paste” next to it is the lightweight version." },
+          { icon:"🔒", title:"Privacy", body:"All data stays only in this device's browser — no account, nothing uploaded, no one else can see it. Save a backup file before clearing your browser data." }
+        ]
+      }
+    };
+
     // ---------- starter / example content ----------
     const STARTER = {
       zh: {
@@ -486,8 +520,18 @@
 
           {/* ---------- help modal ---------- */}
           {showHelp&&<Modal onClose={()=>setShowHelp(false)}>
-            <div style={{fontSize:13.5,lineHeight:2,color:"#3e5e40",whiteSpace:"pre-line",marginBottom:18}}>{t.about}</div>
-            <button onClick={()=>setShowHelp(false)} style={{width:"100%",background:"#2D8659",border:"none",color:"#fff",padding:"11px 0",borderRadius:8,fontSize:12,cursor:"pointer",letterSpacing:2,fontWeight:600}}>{t.close}</button>
+            <div style={{fontSize:18,letterSpacing:3,color:"#2D8659",fontWeight:500,marginBottom:6}}>{HELP[lang].title}</div>
+            <div style={{fontSize:13,lineHeight:1.95,color:"#5a7a5c",marginBottom:18}}>{HELP[lang].intro}</div>
+            {HELP[lang].sections.map((s,i)=>(
+              <div key={i} style={{display:"flex",gap:12,padding:"13px 0",borderTop:"1px solid rgba(45,134,89,0.08)"}}>
+                <span style={{flexShrink:0,width:26,height:26,borderRadius:7,background:"rgba(45,134,89,0.08)",color:"#2D8659",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,marginTop:1}}>{s.icon}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13.5,fontWeight:600,color:"#2c3e2d",marginBottom:3}}>{s.title}</div>
+                  <div style={{fontSize:12.5,lineHeight:1.85,color:"#5a7a5c"}}>{s.body}</div>
+                </div>
+              </div>
+            ))}
+            <button onClick={()=>setShowHelp(false)} style={{marginTop:20,width:"100%",background:"#2D8659",border:"none",color:"#fff",padding:"12px 0",borderRadius:8,fontSize:12,cursor:"pointer",letterSpacing:2,fontWeight:600}}>{t.close}</button>
           </Modal>}
         </div>
       );
