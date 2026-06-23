@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>IT RUNS · 你的執行台</title>
-  <meta name="description" content="IT RUNS — a blank build-your-own console. 自己填寫的執行台。" />
+  <title>IT RUNS · Your Console</title>
+  <meta name="description" content="IT RUNS — a blank build-your-own console." />
 
   <!-- PWA -->
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -94,8 +94,8 @@
         copied:"Copied to clipboard ✓", imported:"Import successful ✓", failed:"Invalid format, import failed",
         editConsole:"Title settings", titleLabel:"Console name", subtitleLabel:"Subtitle", reminderLabel:"Daily reminder text", focusLabel:"Focus session (minutes)",
         placeholderTaskTitle:"What to do…", placeholderModuleName:"Module name…",
-        empty:"No tasks yet. Tap “＋ Task” to start, or create a module above.",
-        about:"This is a blank “console.” The items below are examples — edit them into your own modules and daily / weekly / monthly tasks, or delete and rewrite everything. All data stays on this device only; use “Save to file” to back up or move devices.",
+        empty:"No tasks yet. Tap "＋ Task" to start, or create a module above.",
+        about:"This is a blank "console." The items below are examples — edit them into your own modules and daily / weekly / monthly tasks, or delete and rewrite everything. All data stays on this device only; use "Save to file" to back up or move devices.",
         help:"How to use", close:"Close",
         footer1:"your version", footer2:"IT RUNS · IT RUNS"
       }
@@ -122,17 +122,17 @@
         ]
       },
       en: {
-        title:"How to use", intro:"A blank “console.” Break life into a few modules, pair them with the things you want to do daily / weekly / monthly, and check them off. It opens with examples — change everything to your own, or delete and rewrite.",
+        title:"How to use", intro:"A blank "console." Break life into a few modules, pair them with the things you want to do daily / weekly / monthly, and check them off. It opens with examples — change everything to your own, or delete and rewrite.",
         sections:[
-          { icon:"✎", title:"Getting started", body:"The pencil ✎ on the right of any item lets you edit it — turn the examples into your own words. To add, tap “＋ Task” at the bottom of a list, or “＋ Module” in the modules area." },
-          { icon:"✕", title:"How to delete", body:"Tap ✎ to open an item, then the “Delete” button at the bottom-left turns into a red “Delete for sure?” — tap again to actually remove it (prevents accidental taps)." },
+          { icon:"✎", title:"Getting started", body:"The pencil ✎ on the right of any item lets you edit it — turn the examples into your own words. To add, tap "＋ Task" at the bottom of a list, or "＋ Module" in the modules area." },
+          { icon:"✕", title:"How to delete", body:"Tap ✎ to open an item, then the "Delete" button at the bottom-left turns into a red "Delete for sure?" — tap again to actually remove it (prevents accidental taps)." },
           { icon:"◆", title:"What modules are", body:"Modules are the few areas of your life (Body, Work, Relationships…), each with its own color and icon. A task can be linked to a module — the little dot beside it shows that module's color, so you see at a glance which area it belongs to." },
-          { icon:"○", title:"Daily · Weekly · Monthly", body:"Three tabs, each with its own list. A check means done for this round (today / this week / this month); the progress bar follows along and resets to a new round automatically. “Reset checks” clears this round's checks manually." },
+          { icon:"○", title:"Daily · Weekly · Monthly", body:"Three tabs, each with its own list. A check means done for this round (today / this week / this month); the progress bar follows along and resets to a new round automatically. "Reset checks" clears this round's checks manually." },
           { icon:"▶", title:"Focus session", body:"Tap to start a countdown (10 minutes by default, changeable in the title settings) to quietly do one thing." },
           { icon:"→", title:"Command log", body:"The input box at the bottom lets you jot down thoughts, instructions, things to do — kept by time, like a lightweight journal." },
-          { icon:"✧", title:"Title & settings", body:"Tap the title at the top to change the console name, subtitle, daily reminder text, and focus-session length. The “中 / EN” button at the top-right switches language." },
-          { icon:"▢", title:"Install as an app", body:"iPhone: open in Safari → Share ⬆️ at the bottom → “Add to Home Screen.” Android: Chrome → ⋮ top-right → “Add to Home Screen.” Then it works offline, just like a real app." },
-          { icon:"⤓", title:"Backup & moving devices", body:"“Save to file” saves everything as a .json file (for backup / a new phone); “Load file” reads a saved file back in (this replaces everything — save first). “Copy / Paste” next to it is the lightweight version." },
+          { icon:"✧", title:"Title & settings", body:"Tap the title at the top to change the console name, subtitle, daily reminder text, and focus-session length. The "中 / EN" button at the top-right switches language." },
+          { icon:"▢", title:"Install as an app", body:"iPhone: open in Safari → Share ⬆️ at the bottom → "Add to Home Screen." Android: Chrome → ⋮ top-right → "Add to Home Screen." Then it works offline, just like a real app." },
+          { icon:"⤓", title:"Backup & moving devices", body:""Save to file" saves everything as a .json file (for backup / a new phone); "Load file" reads a saved file back in (this replaces everything — save first). "Copy / Paste" next to it is the lightweight version." },
           { icon:"🔒", title:"Privacy", body:"All data stays only in this device's browser — no account, nothing uploaded, no one else can see it. Save a backup file before clearing your browser data." }
         ]
       }
@@ -205,13 +205,13 @@
     const getMonthKey = () => { const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1); };
 
     function App() {
-      const initial = load() || freshState("zh");
+      const initial = load() || freshState("en");
       const [settings,setSettings] = useState(initial.settings || STARTER.zh.settings);
       const [modules,setModules]   = useState(initial.modules || []);
       const [tasks,setTasks]       = useState(initial.tasks || {daily:[],weekly:[],monthly:[]});
       const [checked,setChecked]   = useState(initial.checked || {});
       const [commands,setCommands] = useState(initial.commands || []);
-      const [lang,setLang]         = useState(initial.lang || "zh");
+      const [lang,setLang]         = useState(initial.lang || "en");
 
       const [tab,setTab]       = useState("daily");
       const [cmdInput,setCmd]  = useState("");
