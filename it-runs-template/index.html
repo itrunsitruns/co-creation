@@ -81,7 +81,8 @@
         about:"這是一個空白的「執行台」。下面是範例 — 把它們改成你自己的模組與每日/每週/每月任務,或整個刪掉重寫。所有資料只存在你這台裝置上;用「存成檔案」就能備份或換裝置。",
         appDesc:"這是一個個人使用的內在語法程式碼練習。",
         help:"使用說明", close:"關閉",
-        footer1:"你的版本", footer2:"IT RUNS · IT RUNS"
+        footer1:"你的版本", footer2:"IT RUNS · IT RUNS",
+        downloadApp:"下載 App"
       },
       en: {
         tabs:{daily:"Daily",weekly:"Weekly",monthly:"Monthly"}, of:"/", toggle:"中",
@@ -99,7 +100,8 @@
         about:'This is a blank "console." The items below are examples — edit them into your own modules and daily / weekly / monthly tasks, or delete and rewrite everything. All data stays on this device only; use "Save to file" to back up or move devices.',
         appDesc:"A personal inner-syntax code practice.",
         help:"How to use", close:"Close",
-        footer1:"your version", footer2:"IT RUNS · IT RUNS"
+        footer1:"your version", footer2:"IT RUNS · IT RUNS",
+        downloadApp:"Download App"
       }
     };
 
@@ -119,6 +121,7 @@
           { icon:"→", title:"指令紀錄", body:"下方輸入框可以隨手記下念頭、指令、想做的事,照時間留存,像一本輕量日誌。" },
           { icon:"✧", title:"改標題與設定", body:"點最上面的標題,可以改控制台名稱、副標、每日提醒文字、專注時段長度。右上角的「中 / EN」可切換語言。" },
           { icon:"▢", title:"裝成手機 app", body:"iPhone:用 Safari 開啟 → 底部「分享」⬆️ → 「加入主畫面」。Android:Chrome → 右上 ⋮ → 「加到主畫面」。之後就能離線使用,像真的 app 一樣。" },
+          { icon:"⤓", title:"下載 App 檔案", body:"點「下載 App」就能把這個程式存成一個 HTML 檔案。存好之後用瀏覽器打開,再按裝成手機 App,就跟直接從網站安裝一樣。換裝置時只要把檔案傳過去再安裝一次。" },
           { icon:"⤓", title:"備份與搬家", body:"「存成檔案」把全部內容存成一個 .json 檔(備份 / 換手機用);「讀取檔案」把存出來的檔讀回來(會整個取代目前內容,讀之前先存一份)。旁邊「複製 / 貼上」是輕量版。" },
           { icon:"🔒", title:"隱私", body:"所有資料只存在你這台裝置的瀏覽器裡,不需要帳號、不上傳、別人看不到。清掉瀏覽器資料前記得先存檔備份。" }
         ]
@@ -134,6 +137,7 @@
           { icon:"→", title:"Command log", body:"The input box at the bottom lets you jot down thoughts, instructions, things to do — kept by time, like a lightweight journal." },
           { icon:"✧", title:"Title & settings", body:'Tap the title at the top to change the console name, subtitle, daily reminder text, and focus-session length. The "中 / EN" button at the top-right switches language.' },
           { icon:"▢", title:"Install as an app", body:'iPhone: open in Safari → Share ⬆️ at the bottom → "Add to Home Screen." Android: Chrome → ⋮ top-right → "Add to Home Screen." Then it works offline, just like a real app.' },
+          { icon:"⤓", title:"Download the App file", body:'Tap "Download App" to save this program as a single HTML file. Open it in a browser, then install it to your home screen — works exactly like installing from the website. To move devices, just transfer the file and reinstall.' },
           { icon:"⤓", title:"Backup & moving devices", body:'"Save to file" saves everything as a .json file (for backup / a new phone); "Load file" reads a saved file back in (this replaces everything — save first). "Copy / Paste" next to it is the lightweight version.' },
           { icon:"🔒", title:"Privacy", body:"All data stays only in this device's browser — no account, nothing uploaded, no one else can see it. Save a backup file before clearing your browser data." }
         ]
@@ -270,6 +274,7 @@
         const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="it-runs-"+getDateKey()+".json"; a.click(); URL.revokeObjectURL(url); };
       const onFile = (e)=>{ const f=e.target.files&&e.target.files[0]; if(!f)return; const r=new FileReader();
         r.onload=()=>{ try{ applyImport(JSON.parse(r.result)); }catch(err){ setIoMsg(t.failed); } }; r.readAsText(f); e.target.value=""; };
+      const downloadHtml = () => { const a=document.createElement("a"); a.href="./index.html"; a.download="it-runs.html"; a.click(); };
 
       // ----- editor (modules / tasks / console) -----
       const openModule = (m)=> setEditor({kind:"module", isNew:!m, data: m ? {...m} : {id:uid("m"),name:"",detail:"",color:PALETTE[modules.length%PALETTE.length],icon:ICONS[modules.length%ICONS.length]}});
@@ -460,6 +465,10 @@
               <input ref={fileRef} type="file" accept="application/json,.json" onChange={onFile} style={{display:"none"}} />
             </div>
             {ioMsg&&<div style={{textAlign:"center",fontSize:11,color:"#5AAF6A",letterSpacing:1,marginBottom:8}}>{ioMsg}</div>}
+            <button onClick={downloadHtml} style={{width:"100%",padding:"11px 0",marginBottom:4,...card,borderRadius:8,color:"#2D8659",fontSize:11,cursor:"pointer",letterSpacing:2,fontWeight:500}}>⤓ {t.downloadApp}</button>
+            <div style={{textAlign:"center",fontSize:10,color:"#8faa82",letterSpacing:1.5,marginBottom:8,lineHeight:1.7}}>
+              {lang==="zh" ? "單一 HTML 檔案 · 存到裝置後可裝成手機 App" : "Single HTML file · install as a mobile app after saving"}
+            </div>
 
             {/* footer */}
             <div style={{marginTop:48,textAlign:"center",lineHeight:2.6}}>
