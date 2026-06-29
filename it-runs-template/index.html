@@ -260,6 +260,23 @@
       const resetChecks = ()=>setChecked(c=>{ const n={...c}; list.forEach(x=>delete n[pk+"-"+x.id]); return n; });
       const resetExample = ()=>{ if(!exArm){ setExArm(true); setTimeout(()=>setExArm(false),3500); return; } setExArm(false); const s=freshState(lang); setSettings(s.settings);setModules(s.modules);setTasks(s.tasks);setChecked({});setCommands([]); setIoMsg(t.imported); };
 
+      // ----- language toggle: also swap example data if still on defaults -----
+      const toggleLang = () => {
+        const newLang = lang === "zh" ? "en" : "zh";
+        const starter = STARTER[lang];
+        const isExample =
+          JSON.stringify(modules) === JSON.stringify(starter.modules) &&
+          JSON.stringify(tasks)   === JSON.stringify(starter.tasks);
+        if (isExample) {
+          const s = freshState(newLang);
+          setModules(s.modules);
+          setTasks(s.tasks);
+          setSettings(s.settings);
+          setChecked({});
+        }
+        setLang(newLang);
+      };
+
       // ----- import / export -----
       const snapshot = ()=>({version:"it-runs-template-v1",exportDate:new Date().toISOString(),settings,modules,tasks,checked,commands,lang});
       const applyImport = (d)=>{ if(!d||!d.version) throw new Error("bad");
@@ -333,7 +350,7 @@
               </button>
               <div style={{display:"flex",gap:8}}>
                 <button onClick={()=>setShowHelp(true)} style={{...pill,padding:"4px 11px",fontSize:12,letterSpacing:1}}>?</button>
-                <button onClick={()=>setLang(lang==="zh"?"en":"zh")} style={{...pill,padding:"4px 14px",fontSize:12,letterSpacing:2}}>{t.toggle}</button>
+                <button onClick={toggleLang} style={{...pill,padding:"4px 14px",fontSize:12,letterSpacing:2}}>{t.toggle}</button>
               </div>
             </header>
 
