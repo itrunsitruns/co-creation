@@ -1,14 +1,14 @@
 // IT RUNS — service worker
 // Bump CACHE on every deploy you want users to hard-refresh to.
-const CACHE = 'it-runs-v5';
+const CACHE = 'it-runs-v6';
 const SCOPE_URL = new URL('./', self.location).pathname;
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './it-runs-dashboard-green.jsx',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
