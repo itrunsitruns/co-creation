@@ -39,8 +39,16 @@ Ponchos get the colour-ring appended as the last thumbnail.
 Develop on a `claude/...` branch, then:
 `git merge --no-ff <branch> -m "..."` into `main`, `git push origin main`.
 
+## 蝦皮連結 / 已售完（build_site.py 內）
+- `SHOPEE = {SKU: 網址}`。一個賣場賣好幾色的，就好幾個 SKU 指到同一個網址
+  （目前 CS45 三色、CS47 三色、CS48 四色各共用一個賣場）。沒登記的 SKU 按鈕維持 `href="#"`。
+- `SOLD = {SKU, ...}`：卡片保留、照片還在，但主圖左上加「已售完 Sold Out」角標、圖片轉灰，
+  購買按鈕換成不可點的 `<span class="soldout">`。售完優先於連結（CS48--41 有賣場但已售完）。
+- 售完樣式的 CSS 住在 `index.html` 的 `<style>`（`.soldout` / `.sold-badge` / `.card.sold`），
+  build_site.py 會原封不動保留 head，所以改樣式要直接改 index.html。
+
 ## Pending
-- PON--103--O-S (Gold poncho): still a placeholder crop — needs a real photo.
+- 還沒有蝦皮連結的 32 款：CS10、CS51、CS52、CS53、CS54、CS57～CS74、LIC 全系列。
 - LIC19--00--O-S (pink/magenta large scarf): currently a crop of the website screenshot.
 
 ## Note
