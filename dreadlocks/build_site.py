@@ -11,7 +11,7 @@ FAM={ "CS45":("民族圖騰圍巾","צעיף אינדיאני"),"CS46":("波浪�
 "CS10":("皺褶感圍巾","צעיף מקומט"),"LIC":("純棉大方巾","צעיף כותנה"),"PON":("針織斗篷","פונצ'ו סריג")}
 COLOR={"Orange":"橘","Fuchsia":"桃紅","Green":"綠","Red":"紅","Brown":"棕","Blue":"藍","Mustard":"芥末黃","Grey":"灰","Mocha":"摩卡","Dark Grey":"深灰","White":"白","Rose / Pink":"玫瑰粉","Denim":"丹寧藍","Coffee":"咖啡","Cream":"奶油","Smoky Pink":"煙燻粉","Bottle Green":"瓶綠","Multicolor print":"繽紛印花","Blue print":"藍印花","Dark-blue floral":"深藍花卉","Pink/Magenta floral":"桃紫花卉","Zebra B&W":"黑白斑馬","Marengo / Charcoal":"鐵灰","Tan / Chestnut":"棕褐","Bordeaux":"酒紅","Olive":"橄欖","Celadon":"青瓷","Cinnamon":"肉桂","Sky Blue":"天藍","Gold":"金","Avocado":"酪梨綠"}
 ROWS=[
-("CS45--41--00","Orange","100% Polyester","180 x 92"),("CS45--50--00","Fuchsia","100% Polyester","180 x 92"),("CS45--92--00","Green","100% Polyester","180 x 92"),
+("CS45--50--00","Fuchsia","100% Polyester","180 x 92"),("CS45--41--00","Orange","100% Polyester","180 x 92"),("CS45--92--00","Green","100% Polyester","180 x 92"),
 ("CS46--23--00","Red","100% Polyester","180 x 92"),("CS46--50--00","Fuchsia","100% Polyester","180 x 92"),("CS46--70--00","Brown","100% Polyester","180 x 92"),
 ("CS47--22--00","Blue","100% Polyester","180 x 92"),("CS47--33--00","Mustard","100% Polyester","180 x 92"),("CS47--92--00","Green","100% Polyester","180 x 92"),
 ("CS48--15--00","Grey","100% Polyester","180 x 92"),("CS48--22--00","Blue","100% Polyester","180 x 92"),("CS48--26--00","Mocha","100% Polyester","180 x 92"),("CS48--41--00","Orange","100% Polyester","180 x 92"),
@@ -28,6 +28,23 @@ ROWS=[
 ("PON--7--O-S","White","針織 Knit","One Size"),("PON--11--O-S","Bordeaux","針織 Knit","One Size"),("PON--17--O-S","Olive","針織 Knit","One Size"),
 ("PON--42--O-S","Celadon","針織 Knit","One Size"),("PON--77--O-S","Cinnamon","針織 Knit","One Size"),("PON--86--O-S","Bottle Green","針織 Knit","One Size"),("PON--96--O-S","Sky Blue","針織 Knit","One Size"),("PON--103--O-S","Gold","針織 Knit","One Size"),("PON--548--O-S","Avocado","針織 Knit","One Size"),
 ]
+# 蝦皮賣場連結。一個賣場賣好幾色的，就好幾個 SKU 指到同一個網址（CS45 三色、CS47 三色、CS48 四色）。
+SHOPEE={
+ "PON--7--O-S":"https://tw.shp.ee/r6p9eRMk",
+ "PON--11--O-S":"https://tw.shp.ee/jnQC9eLi",
+ "PON--17--O-S":"https://tw.shp.ee/Kaq7GcU4",
+ "PON--42--O-S":"https://tw.shp.ee/XJMh38Uq",
+ "PON--77--O-S":"https://tw.shp.ee/FqzcHBq6",
+ "PON--86--O-S":"https://tw.shp.ee/ydHG2QXh",
+ "PON--103--O-S":"https://tw.shp.ee/zYwb9zvk",
+ "CS45--50--00":"https://tw.shp.ee/WoxVpdVq","CS45--41--00":"https://tw.shp.ee/WoxVpdVq","CS45--92--00":"https://tw.shp.ee/WoxVpdVq",
+ "CS46--23--00":"https://tw.shp.ee/mBgtHoce","CS46--50--00":"https://tw.shp.ee/xLZAtWKx","CS46--70--00":"https://tw.shp.ee/nXMD6Ygy",
+ "CS47--22--00":"https://tw.shp.ee/EQuiJBGN","CS47--33--00":"https://tw.shp.ee/EQuiJBGN","CS47--92--00":"https://tw.shp.ee/EQuiJBGN",
+ "CS48--15--00":"https://tw.shp.ee/bCZrkB9G","CS48--22--00":"https://tw.shp.ee/bCZrkB9G","CS48--26--00":"https://tw.shp.ee/bCZrkB9G","CS48--41--00":"https://tw.shp.ee/bCZrkB9G",
+ "CS55--01--00":"https://tw.shp.ee/GisaP7go","CS56--01--00":"https://tw.shp.ee/nzMSbrvF",
+}
+# 已售完：卡片保留（照片還在），但不給購買按鈕。
+SOLD={"PON--96--O-S","PON--548--O-S","CS48--41--00"}
 fam=lambda s: s[:3] if s.startswith("LIC") else ("PON" if s.startswith("PON") else s.split("--")[0])
 price=lambda s: 2380 if s.startswith("PON") else (1680 if s.startswith("LIC") else (1820 if s.startswith("CS10") else 1400))
 key=lambda s: s.replace("--","_").replace(" ","")
@@ -37,9 +54,9 @@ def gallery(sku):
     if sku.startswith("PON") and os.path.exists(os.path.join(A,"PON__ring.jpg")): imgs=imgs+["PON__ring.jpg"]
     return ["assets/"+i for i in imgs]
 SECTIONS=[
- ("poncho","針織斗篷","Knit Poncho","老闆的最愛 ♥ 輕薄針織披肩，One Size。右側縮圖可點看多角度，每款附「一圈全色圖」。",["PON"]),
+ ("poncho","針織斗篷","Knit Poncho","老闆的最愛 ♥ 輕薄針織披肩，One Size。右側縮圖可點看多角度，每款附「全色圖」。",["PON"]),
  ("flow","多元印花圍巾","Mixed Print Scarves","輕盈飄逸、色彩飽和的長圍巾，180×92 cm，垂墜感佳，四季皆宜；可作頸巾、披巾或頭巾。",["CS45","CS46","CS47","CS48"]),
- ("cotton","純棉印花圍巾","Cotton Printed Scarves","100% 純棉，柔軟透氣、親膚舒適，180×86 cm（部分款 200 cm）；每一條都有自己的圖案個性。",["CS53","CS54","CS55","CS56","CS57","CS58","CS60","CS61","CS62","CS63","CS64","CS66","CS68","CS69","CS70","CS71","CS72","CS73","CS74"]),
+ ("cotton","純棉印花圍巾","Cotton Printed Scarves","100% 純棉，柔軟透氣、親膚舒適，180×86 cm（部分款 200 cm）；每一條都有自己的圖案個性。",["CS55","CS56","CS57","CS58","CS60","CS61","CS62","CS63","CS64","CS66","CS68","CS69","CS70","CS71","CS72","CS73","CS74","CS53","CS54"]),
  ("sahara","撒哈拉 & 素色","Sahara & Plain","素雅好搭的長圍巾。撒哈拉款 200×86 cm、邊緣短流蘇；素色款 180×86 cm，輕柔點綴。",["CS51","CS52"]),
  ("large","純棉大方巾","Cotton Large Scarves","100% 純棉大尺幅（約 180×110 cm），可當圍巾、披肩，也能作沙灘罩衫。",["LIC"]),
  ("crinkle","皺褶感圍巾","Crinkled Scarf","薄透皺褶質感，輕盈包覆、層次十足（材質與尺寸以原廠確認為準）。",["CS10"]),
@@ -57,9 +74,14 @@ def card(sku,color,mat,size):
     if len(imgs)>1:
         ts="".join(f'<img class="t{" active" if i==0 else ""}" data-i="{i}" src="{im}" alt="{esc(title)} {i+1}">' for i,im in enumerate(imgs))
         rail=f'<div class="rail">{ts}</div>'
-    return f'''      <div class="card reveal">
+    sold=sku in SOLD; link=SHOPEE.get(sku)
+    badge='<span class="sold-badge">已售完 Sold Out</span>' if sold else ''
+    if sold: buy='<span class="soldout">已售完 Sold Out</span>'
+    elif link: buy=f'<a class="shopee" href="{esc(link)}" target="_blank" rel="noopener" aria-label="前往蝦皮購買">前往蝦皮購買</a>'
+    else: buy='<a class="shopee" href="#" aria-label="前往蝦皮購買">前往蝦皮購買</a>'
+    return f'''      <div class="card reveal{" sold" if sold else ""}">
         <div class="ph" data-images='{data}' data-title="{esc(title)}">
-          <div class="main"><img loading="lazy" src="{main}" alt="{esc(title)}"><span class="zoom" aria-hidden="true">⤢</span></div>
+          <div class="main"><img loading="lazy" src="{main}" alt="{esc(title)}">{badge}<span class="zoom" aria-hidden="true">⤢</span></div>
           {rail}
         </div>
         <div class="info">
@@ -67,7 +89,7 @@ def card(sku,color,mat,size):
           <h3>{esc(zh)}・{esc(czh)}</h3>
           <p class="meta">{esc(color)}　|　{esc(mat)}　|　{esc(size)}{unit}</p>
           <p class="skuline"><span class="sku">{esc(sku)}</span><span class="origin">{esc(origin)}</span></p>
-          <div class="buy"><span class="price">NT$ {pr:,}</span><a class="shopee" href="#" aria-label="前往蝦皮購買">前往蝦皮購買</a></div>
+          <div class="buy"><span class="price">NT$ {pr:,}</span>{buy}</div>
         </div>
       </div>'''
 secs=[]
@@ -91,8 +113,9 @@ head=PAGE.split("</head>")[0]+"</head>"
 # rebuild body using existing static parts (header/hero/story/footer/lightbox/script) by regenerating sections only is complex;
 # Instead, reuse the previously-saved full template structure by string rebuild:
 body=f'''<body>
+<span id="top"></span>
 <header><div class="nav">
-  <div class="logo">Dreadlocks<small>Signa Taiwan 選品</small></div>
+  <a href="#top" class="logo">Dreadlocks<small>Signa Taiwan 希葛納台灣 選品</small></a>
   <ul>
     <li><a href="#poncho">針織斗篷</a></li><li><a href="#flow">印花圍巾</a></li>
     <li><a href="#cotton">純棉圍巾</a></li><li><a href="#sahara">撒哈拉/素色</a></li>
@@ -102,9 +125,9 @@ body=f'''<body>
 <div class="hero">
   <p class="eyebrow">Israel → Taiwan</p>
   <h1>來自以色列的手感織品<br>第一站：圍巾<span class="he">צעיפים מישראל</span></h1>
-  <p>Dreadlocks 是以色列的自然系服飾品牌，以根源文化與大地色彩聞名。Signa Taiwan 把它完整地帶來台灣——從一條圍巾開始。本系列 {TOTAL} 款顏色，每一條都有自己的希伯來名字。</p>
-  <p style="opacity:.8;margin-top:14px;font-size:.92rem">Dreadlocks is a natural-style humanswear label from Israel, rooted in earthy colours and a free-spirited soul. Signa Taiwan brings the full brand to Taiwan — beginning with a single scarf. This collection has {TOTAL} colours, each with its own Hebrew name.</p>
-  <div class="cta-row"><a class="btn btn-solid" href="#poncho">看招牌針織斗篷</a><a class="btn btn-line" href="#values">品牌故事</a></div>
+  <p>Dreadlocks 是以色列的自然系服飾品牌，以根源文化與大地色彩聞名。Signa Taiwan 希葛納台灣 把它完整地帶來台灣——從一條圍巾開始。本系列 {TOTAL} 款顏色，每一條都有自己的希伯來名字。</p>
+  <p style="opacity:.8;margin-top:14px;font-size:.92rem">Dreadlocks is a natural-style humanswear label from Israel, rooted in earthy colours and a free-spirited soul. Signa Taiwan 希葛納台灣 brings the full brand to Taiwan — beginning with a single scarf. This collection has {TOTAL} colours, each with its own Hebrew name.</p>
+  <div class="cta-row"><a class="btn btn-solid" href="#poncho">看招牌針織斗篷<span class="en">Signature knit poncho</span></a><a class="btn btn-line" href="#values">品牌故事<span class="en">Our story</span></a></div>
 </div>
 <div class="swatch-strip" aria-hidden="true"><span style="background:var(--eggplant)"></span><span style="background:var(--olive)"></span><span style="background:var(--cognac)"></span><span style="background:var(--mocha)"></span><span style="background:var(--cream)"></span></div>
 {chr(10).join(secs)}
@@ -127,7 +150,7 @@ body=f'''<body>
   <p class="body reveal" style="margin-top:16px;opacity:.78">Dreadlocks' full collection — tops, dresses, the yoga line and accessories — will arrive season by season.<br>The scarf is our first letter.</p>
 </div></section>
 <footer><div class="wrap">
-  <div>© Signa Taiwan・以色列 Dreadlocks 原廠選品<br>signataiwan@gmail.com</div>
+  <div>© Signa Taiwan 希葛納台灣・以色列 Dreadlocks 原廠選品<br>signataiwan@gmail.com</div>
   <div><a href="#">蝦皮賣場</a> ・ <a href="#">Instagram</a> ・ <a href="../">Co-Creation ↗</a></div>
 </div></footer>
 <div class="lb" id="lb" aria-modal="true" role="dialog">
