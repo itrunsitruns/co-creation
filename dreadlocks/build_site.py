@@ -15,18 +15,18 @@ ROWS=[
 ("CS46--23--00","Red","100% Polyester","180 x 92"),("CS46--50--00","Fuchsia","100% Polyester","180 x 92"),("CS46--70--00","Brown","100% Polyester","180 x 92"),
 ("CS47--22--00","Blue","100% Polyester","180 x 92"),("CS47--33--00","Mustard","100% Polyester","180 x 92"),("CS47--92--00","Green","100% Polyester","180 x 92"),
 ("CS48--15--00","Grey","100% Polyester","180 x 92"),("CS48--22--00","Blue","100% Polyester","180 x 92"),("CS48--26--00","Mocha","100% Polyester","180 x 92"),("CS48--41--00","Orange","100% Polyester","180 x 92"),
-("CS53--01--00","Multicolor print","100% Cotton","180 x 86"),("CS54--01--00","Multicolor print","100% Cotton","180 x 86"),("CS55--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS56--01--00","Multicolor print","100% Cotton","180 x 86"),("CS57--01--00","Multicolor print","100% Cotton","180 x 86"),("CS58--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS60--01--00","Multicolor print","100% Cotton","180 x 86"),("CS61--01--00","Multicolor print","100% Cotton","200 x 86"),("CS62--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS63--01--00","Multicolor print","100% Cotton","180 x 86"),("CS64--01--00","Multicolor print","100% Cotton","200 x 86"),("CS66--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS68--01--00","Multicolor print","100% Cotton","180 x 86"),("CS69--01--00","Multicolor print","100% Cotton","180 x 86"),("CS70--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS71--01--00","Multicolor print","100% Cotton","180 x 86"),("CS72--01--00","Multicolor print","100% Cotton","180 x 86"),("CS73--01--00","Multicolor print","100% Cotton","200 x 86"),("CS74--01--00","Multicolor print","100% Cotton","180 x 86"),
-("CS51--2--00","Dark Grey","100% Polyester","200 x 86"),("CS51--7--00","White","100% Polyester","200 x 86"),("CS51--69--00","Rose / Pink","100% Polyester","200 x 86"),("CS51--111--00","Denim","100% Polyester","200 x 86"),("CS51--116--00","Coffee","100% Polyester","200 x 86"),
+("CS53--01--00","Multicolor print","100% Polyester","180 x 86"),("CS54--01--00","Multicolor print","100% Polyester","180 x 86"),("CS55--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS56--01--00","Multicolor print","100% Polyester","180 x 86"),("CS57--01--00","Multicolor print","100% Polyester","180 x 86"),("CS58--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS60--01--00","Multicolor print","100% Polyester","180 x 86"),("CS61--01--00","Multicolor print","100% Polyester","200 x 86"),("CS62--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS63--01--00","Multicolor print","100% Polyester","180 x 86"),("CS64--01--00","Multicolor print","100% Polyester","200 x 86"),("CS66--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS68--01--00","Multicolor print","100% Polyester","180 x 86"),("CS69--01--00","Multicolor print","100% Polyester","180 x 86"),("CS70--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS71--01--00","Multicolor print","100% Polyester","180 x 86"),("CS72--01--00","Multicolor print","100% Polyester","180 x 86"),("CS73--01--00","Multicolor print","100% Polyester","200 x 86"),("CS74--01--00","Multicolor print","100% Polyester","180 x 86"),
+("CS51--2--00","Dark Grey","100% Cotton","200 x 86"),("CS51--7--00","White","100% Cotton","200 x 86"),("CS51--69--00","Rose / Pink","100% Cotton","200 x 86"),("CS51--111--00","Denim","100% Cotton","200 x 86"),("CS51--116--00","Coffee","100% Cotton","200 x 86"),
 ("CS52--2--00","Dark Grey","100% Polyester","180 x 86"),("CS52--22--00","Blue","100% Polyester","180 x 86"),("CS52--27--00","Cream","100% Polyester","180 x 85"),("CS52--34--00","Smoky Pink","100% Polyester","180 x 86"),("CS52--86--00","Bottle Green","100% Polyester","180 x 86"),
 ("LIC06--00--O-S","Blue print","100% Cotton","180 x 110"),("LIC07--00--O-S","Dark-blue floral","100% Cotton","190 x 100"),("LIC19--00--O-S","Pink/Magenta floral","100% Cotton","180 x 110"),("LIC20--00--O-S","Zebra B&W","100% Cotton","180 x 110"),
-("CS10--6--00","Marengo / Charcoal","薄皺褶 Crinkle","—"),
-("PON--7--O-S","White","針織 Knit","One Size"),("PON--11--O-S","Bordeaux","針織 Knit","One Size"),("PON--17--O-S","Olive","針織 Knit","One Size"),
-("PON--42--O-S","Celadon","針織 Knit","One Size"),("PON--77--O-S","Cinnamon","針織 Knit","One Size"),("PON--86--O-S","Bottle Green","針織 Knit","One Size"),("PON--96--O-S","Sky Blue","針織 Knit","One Size"),("PON--103--O-S","Gold","針織 Knit","One Size"),("PON--548--O-S","Avocado","針織 Knit","One Size"),
+("CS10--6--00","Marengo / Charcoal","50% Viscose 50% Cotton","—"),
+("PON--7--O-S","White","100% Rayon","One Size"),("PON--11--O-S","Bordeaux","100% Rayon","One Size"),("PON--17--O-S","Olive","100% Rayon","One Size"),
+("PON--42--O-S","Celadon","100% Rayon","One Size"),("PON--77--O-S","Cinnamon","100% Rayon","One Size"),("PON--86--O-S","Bottle Green","100% Rayon","One Size"),("PON--96--O-S","Sky Blue","100% Rayon","One Size"),("PON--103--O-S","Gold","100% Rayon","One Size"),("PON--548--O-S","Avocado","100% Rayon","One Size"),
 ]
 # 蝦皮賣場連結。一個賣場賣好幾色的，就好幾個 SKU 指到同一個網址（CS45 三色、CS47 三色、CS48 四色）。
 SHOPEE={
@@ -56,17 +56,19 @@ def gallery(sku):
 SECTIONS=[
  ("poncho","針織斗篷","Knit Poncho","老闆的最愛 ♥ 輕薄針織披肩，One Size。右側縮圖可點看多角度，每款附「全色圖」。",["PON"]),
  ("flow","多元印花圍巾","Mixed Print Scarves","輕盈飄逸、色彩飽和的長圍巾，180×92 cm，垂墜感佳，四季皆宜；可作頸巾、披巾或頭巾。",["CS45","CS46","CS47","CS48"]),
- ("cotton","純棉印花圍巾","Cotton Printed Scarves","100% 純棉，柔軟透氣、親膚舒適，180×86 cm（部分款 200 cm）；每一條都有自己的圖案個性。",["CS55","CS56","CS57","CS58","CS60","CS61","CS62","CS63","CS64","CS66","CS68","CS69","CS70","CS71","CS72","CS73","CS74","CS53","CS54"]),
- ("sahara","撒哈拉 & 素色","Sahara & Plain","素雅好搭的長圍巾。撒哈拉款 200×86 cm、邊緣短流蘇；素色款 180×86 cm，輕柔點綴。",["CS51","CS52"]),
- ("large","純棉大方巾","Cotton Large Scarves","100% 純棉大尺幅（約 180×110 cm），可當圍巾、披肩，也能作沙灘罩衫。",["LIC"]),
- ("crinkle","皺褶感圍巾","Crinkled Scarf","薄透皺褶質感，輕盈包覆、層次十足（材質與尺寸以原廠確認為準）。",["CS10"]),
+ ("cotton","經典印花圍巾","Classic Printed Scarves","輕盈飄逸、垂墜感佳，180×86 cm（部分款 200 cm）；每一條都有自己的圖案個性，單一花色不重複。",["CS55","CS56","CS57","CS58","CS60","CS61","CS62","CS63","CS64","CS66","CS68","CS69","CS70","CS71","CS72","CS73","CS74","CS53","CS54"]),
+ ("sahara","撒哈拉 & 素色","Sahara & Plain","素雅好搭的長圍巾。撒哈拉款 100% 純棉、200×86 cm、邊緣短流蘇；素色款聚酯纖維、180×86 cm，輕柔點綴。",["CS51","CS52"]),
+ ("large","純棉大方巾","Cotton Large Scarves","100% 純棉大尺幅（約 180×110 cm），可當圍巾、披肩，也能作沙灘罩衫。印度製造。",["LIC"]),
+ ("crinkle","皺褶感圍巾","Crinkled Scarf","薄透皺褶質感，輕盈包覆、層次十足。50% 嫘縈 50% 棉（尺寸以實物為準）。",["CS10"]),
 ]
 by={}
 for r in ROWS: by.setdefault(fam(r[0]),[]).append(r)
 esc=lambda s: html.escape(str(s),quote=True)
 def card(sku,color,mat,size):
     f=fam(sku); zh,he=FAM[f]; czh=COLOR.get(color,color); pr=price(sku); unit=' cm' if 'x' in size else ''
-    origin="Made in Bali・峇里島製造" if sku.startswith("PON") else "Made in Israel・以色列製造"
+    origin=("Made in Bali・峇里島製造" if sku.startswith("PON")
+            else "Made in India・印度製造" if sku.startswith("LIC")
+            else "Made in China・中國製造")
     imgs=gallery(sku)
     if not imgs: imgs=["assets/"+key(sku)+".jpg"]
     main=imgs[0]; data=esc(json.dumps(imgs)); title=f"{zh}・{czh}"
@@ -118,7 +120,7 @@ body=f'''<body>
   <a href="#top" class="logo">Dreadlocks<small>Signa Taiwan 希葛納台灣 選品</small></a>
   <ul>
     <li><a href="#poncho">針織斗篷</a></li><li><a href="#flow">印花圍巾</a></li>
-    <li><a href="#cotton">純棉圍巾</a></li><li><a href="#sahara">撒哈拉/素色</a></li>
+    <li><a href="#cotton">經典印花</a></li><li><a href="#sahara">撒哈拉/素色</a></li>
     <li><a href="#values">品牌理念</a></li><li><a href="#story">品牌故事</a></li><li><a href="../">← Co-Creation</a></li>
   </ul>
 </div></header>
@@ -137,7 +139,7 @@ body=f'''<body>
     <div class="vgrid">
       <div class="vitem reveal"><div class="vic">🌿</div><h4>自然系<span>Natural Style</span></h4><p>根源文化、大地色彩，崇尚自然與自在。<br>Rooted in nature — earthy colours &amp; a free spirit.</p></div>
       <div class="vitem reveal"><div class="vic">♻️</div><h4>永續環保<span>Ecological Vision</span></h4><p>具環境意識、公平善待的品牌。<br>Environmentally conscious, with fair &amp; ethical practices.</p></div>
-      <div class="vitem reveal"><div class="vic">🇮🇱</div><h4>以色列品牌<span>Israeli Brand</span></h4><p>自 1999 年，於加利利設計與製造。<br>Designed &amp; made in the Galilee since 1999.</p></div>
+      <div class="vitem reveal"><div class="vic">🇮🇱</div><h4>以色列品牌<span>Israeli Brand</span></h4><p>自 1999 年，於加利利設計。<br>Designed in the Galilee since 1999.</p></div>
       <div class="vitem reveal"><div class="vic">🛡️</div><h4>安心購物<span>Secure Shopping</span></h4><p>安全交易、購物有保障。<br>Safe, secure transactions you can trust.</p></div>
       <div class="vitem reveal"><div class="vic">🏅</div><h4>品質把關<span>Quality Control</span></h4><p>嚴選優質布料、原創印花。<br>Quality fabrics &amp; original, in-house prints.</p></div>
     </div>
@@ -145,7 +147,7 @@ body=f'''<body>
 </section>
 <section class="story" id="story"><div class="wrap" style="text-align:center">
   <div class="sec-head reveal"><p class="kicker">From the Roots</p><h2>一條從地中海到太平洋的線</h2></div>
-  <div class="journey reveal"><div class="pt"><div class="city">以色列</div><div class="sub">設計・縫製</div></div><div class="line"></div><div class="pt"><div class="city">台灣</div><div class="sub">選品・送到你手上</div></div></div>
+  <div class="journey reveal"><div class="pt"><div class="city">以色列</div><div class="sub">設計</div></div><div class="line"></div><div class="pt"><div class="city">台灣</div><div class="sub">選品・送到你手上</div></div></div>
   <p class="body reveal">Dreadlocks 的全系列——上衣、洋裝、瑜珈系列、飾品——將隨著季節陸續抵達。<br>圍巾，是我們的第一封信。</p>
   <p class="body reveal" style="margin-top:16px;opacity:.78">Dreadlocks' full collection — tops, dresses, the yoga line and accessories — will arrive season by season.<br>The scarf is our first letter.</p>
 </div></section>
