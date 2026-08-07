@@ -20,7 +20,11 @@ Ponchos get the colour-ring appended as the last thumbnail.
 ## Product data (inside build_site.py)
 - ROWS = list of (SKU, colour, material, size) — 56 in-stock colours.
 - Prices: scarf NT$1,400 · cotton-large(LIC) NT$1,680 · crinkled(CS10) NT$1,820 · poncho(PON) NT$2,380.
-- Origin: scarves "Made in Israel・以色列製造" · ponchos "Made in Bali・峇里島製造".
+- Origin (2026-08-07 更正，依實物洗標): ponchos "Made in Bali・峇里島製造" · LIC "Made in India・印度製造"
+  · 其餘全部 "Made in China・中國製造"。**不要再寫以色列製造** — 以色列是品牌與設計地，不是產地。
+- Materials (2026-08-07 更正，依實物洗標): CS53–74 是 100% Polyester（原誤植純棉）· CS51 是 100% Cotton
+  （原誤植聚酯）· CS10 是 50% Viscose 50% Cotton · PON 是 100% Rayon（原寫「針織 Knit」，那是織法不是纖維）。
+  舊資料源自以色列官網與 Excel，與實物不符；洗標為準。
 - Bilingual throughout (中文 first on cards' names; English-first on origin line).
 - Font: Noto Sans TC site-wide, light weight (300/400). Logo title-case "Dreadlocks / Signa Taiwan".
 
