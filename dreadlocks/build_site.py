@@ -25,8 +25,8 @@ ROWS=[
 ("CS52--2--00","Dark Grey","100% Polyester","180 x 86"),("CS52--22--00","Blue","100% Polyester","180 x 86"),("CS52--27--00","Cream","100% Polyester","180 x 85"),("CS52--34--00","Smoky Pink","100% Polyester","180 x 86"),("CS52--86--00","Bottle Green","100% Polyester","180 x 86"),
 ("LIC06--00--O-S","Blue print","100% Cotton","180 x 110"),("LIC07--00--O-S","Dark-blue floral","100% Cotton","190 x 100"),("LIC19--00--O-S","Pink/Magenta floral","100% Cotton","180 x 110"),("LIC20--00--O-S","Zebra B&W","100% Cotton","180 x 110"),
 ("CS10--6--00","Marengo / Charcoal","50% Viscose 50% Cotton","—"),
-("PON--7--O-S","White","100% Rayon","One Size"),("PON--11--O-S","Bordeaux","100% Rayon","One Size"),("PON--17--O-S","Olive","100% Rayon","One Size"),
-("PON--42--O-S","Celadon","100% Rayon","One Size"),("PON--77--O-S","Cinnamon","100% Rayon","One Size"),("PON--86--O-S","Bottle Green","100% Rayon","One Size"),("PON--96--O-S","Sky Blue","100% Rayon","One Size"),("PON--103--O-S","Gold","100% Rayon","One Size"),("PON--548--O-S","Avocado","100% Rayon","One Size"),
+("PON--7--O-S","White","針織 Knit・100% Rayon","One Size"),("PON--11--O-S","Bordeaux","針織 Knit・100% Rayon","One Size"),("PON--17--O-S","Olive","針織 Knit・100% Rayon","One Size"),
+("PON--42--O-S","Celadon","針織 Knit・100% Rayon","One Size"),("PON--77--O-S","Cinnamon","針織 Knit・100% Rayon","One Size"),("PON--86--O-S","Bottle Green","針織 Knit・100% Rayon","One Size"),("PON--96--O-S","Sky Blue","針織 Knit・100% Rayon","One Size"),("PON--103--O-S","Gold","針織 Knit・100% Rayon","One Size"),("PON--548--O-S","Avocado","針織 Knit・100% Rayon","One Size"),
 ]
 # 蝦皮賣場連結。一個賣場賣好幾色的，就好幾個 SKU 指到同一個網址（CS45 三色、CS47 三色、CS48 四色）。
 SHOPEE={
