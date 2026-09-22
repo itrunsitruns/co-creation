@@ -51,6 +51,16 @@ Develop on a `claude/...` branch, then:
 - 售完樣式的 CSS 住在 `index.html` 的 `<style>`（`.soldout` / `.sold-badge` / `.card.sold`），
   build_site.py 會原封不動保留 head，所以改樣式要直接改 index.html。
 
+## 2026-09-23 更新：Φiaööna 自拍實穿照
+- 281 張自拍照（Drive 原檔，Galaxy S24 Ultra）已縮成 1000px、去除 EXIF（含 GPS），接在每款官方照後面，
+  編號延續（例：CS61 官方 __1–3，自拍 __4–12）。原檔檔名對照：CS45-Fuchsia→CS45_50_00、CS48-Moca→CS48_26_00、
+  CS48-Gray→CS48_15_00、CS51-Jeans→CS51_111_00、CS51-Pink→CS51_69_00、CS51-Darkgray→CS51_2_00、
+  CS52-Gray→CS52_2_00、Pon-Saladin→PON_42（Celadon）、Pon-cinnimon→PON_77、Pon-Bordeau→PON_11、Pon-Gold→PON_103。
+- 尚無自拍照：CS52 Blue/Cream/Smoky Pink、CS60、LIC20、PON 86/96/548。
+- `assets/thumbs/`：右側縮圖列用的 160px 小圖（build_site.py 自動使用，若存在）。新增照片後要一起產生 thumbs。
+- build_site.py：改成數字排序（__2 在 __10 前面）；DEST 改為腳本所在資料夾；縮圖加 data-full + lazy。
+- index.html：縮圖點擊改用 data-full；.rail 加 contain:size，縮圖多時在卡片內捲動，不再撐高卡片。
+
 ## Pending
 - 還沒有蝦皮連結的 32 款：CS10、CS51、CS52、CS53、CS54、CS57～CS74、LIC 全系列。
 - LIC19--00--O-S (pink/magenta large scarf): currently a crop of the website screenshot.

@@ -1,5 +1,5 @@
 import os, glob, html, json
-DEST="/home/user/co-creation/dreadlocks"; A=DEST+"/assets"
+DEST=os.path.dirname(os.path.abspath(__file__)); A=DEST+"/assets"
 FAM={ "CS45":("民族圖騰圍巾","צעיף אינדיאני"),"CS46":("波浪紋圍巾","צעיף גלים"),"CS47":("民族風圍巾","צעיף אתני"),
 "CS48":("葉影印花圍巾","צעיף עלים"),"CS51":("撒哈拉長圍巾","צעיף סהרה"),"CS52":("素色圍巾","צעיף חלק"),
 "CS53":("繽紛花卉圍巾","צעיף פרת צבעוני"),"CS54":("黑底花卉圍巾","צעיף פרח שחור"),"CS55":("奶油花卉圍巾","צעיף פרח שמנת"),
@@ -49,7 +49,9 @@ fam=lambda s: s[:3] if s.startswith("LIC") else ("PON" if s.startswith("PON") el
 price=lambda s: 2380 if s.startswith("PON") else (1680 if s.startswith("LIC") else (1820 if s.startswith("CS10") else 1400))
 key=lambda s: s.replace("--","_").replace(" ","")
 def gallery(sku):
-    multi=sorted(glob.glob(os.path.join(A,key(sku)+"__*.jpg")))
+    import re as _re
+    _n=lambda m: int(_re.search(r"__(\d+)\.jpg$",m).group(1)) if _re.search(r"__(\d+)\.jpg$",m) else 0
+    multi=sorted(glob.glob(os.path.join(A,key(sku)+"__*.jpg")),key=_n)  # natural sort: __2 before __10
     imgs=[os.path.basename(m) for m in multi] if multi else ([key(sku)+".jpg"] if os.path.exists(os.path.join(A,key(sku)+".jpg")) else [])
     if sku.startswith("PON") and os.path.exists(os.path.join(A,"PON__ring.jpg")): imgs=imgs+["PON__ring.jpg"]
     return ["assets/"+i for i in imgs]
@@ -74,7 +76,8 @@ def card(sku,color,mat,size):
     main=imgs[0]; data=esc(json.dumps(imgs)); title=f"{zh}・{czh}"
     rail=""
     if len(imgs)>1:
-        ts="".join(f'<img class="t{" active" if i==0 else ""}" data-i="{i}" src="{im}" alt="{esc(title)} {i+1}">' for i,im in enumerate(imgs))
+        th=lambda im: ("assets/thumbs/"+os.path.basename(im)) if os.path.exists(os.path.join(A,"thumbs",os.path.basename(im))) else im
+        ts="".join(f'<img class="t{" active" if i==0 else ""}" data-i="{i}" loading="lazy" src="{th(im)}" data-full="{im}" alt="{esc(title)} {i+1}">' for i,im in enumerate(imgs))
         rail=f'<div class="rail">{ts}</div>'
     sold=sku in SOLD; link=SHOPEE.get(sku)
     badge='<span class="sold-badge">已售完 Sold Out</span>' if sold else ''
