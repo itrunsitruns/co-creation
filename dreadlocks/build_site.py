@@ -44,7 +44,7 @@ SHOPEE={
  "CS55--01--00":"https://tw.shp.ee/GisaP7go","CS56--01--00":"https://tw.shp.ee/nzMSbrvF",
 }
 # 已售完：卡片保留（照片還在），但不給購買按鈕。
-SOLD={"PON--96--O-S","PON--548--O-S","CS48--41--00"}
+SOLD={"PON--96--O-S","PON--548--O-S","CS48--41--00","LIC20--00--O-S","CS52--27--00","CS52--34--00"}
 fam=lambda s: s[:3] if s.startswith("LIC") else ("PON" if s.startswith("PON") else s.split("--")[0])
 price=lambda s: 2380 if s.startswith("PON") else (1680 if s.startswith("LIC") else (1820 if s.startswith("CS10") else 1400))
 key=lambda s: s.replace("--","_").replace(" ","")

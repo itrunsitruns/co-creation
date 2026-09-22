@@ -61,6 +61,11 @@ Develop on a `claude/...` branch, then:
 - build_site.py：改成數字排序（__2 在 __10 前面）；DEST 改為腳本所在資料夾；縮圖加 data-full + lazy。
 - index.html：縮圖點擊改用 data-full；.rail 加 contain:size，縮圖多時在卡片內捲動，不再撐高卡片。
 
+## 2026-09-23 更新二
+- 新增已售完：LIC20--00--O-S、CS52--27--00（Cream）、CS52--34--00（Smoky Pink）。
+- 手機上偶爾有縮圖顯示破圖（網路不穩／同時載入太多張，檔案本身正常）。index.html 的 <script> 開頭加了
+  healImg()：載入失敗自動重試兩次，仍失敗就改用大圖；燈箱縮圖也套用。
+
 ## Pending
 - 還沒有蝦皮連結的 32 款：CS10、CS51、CS52、CS53、CS54、CS57～CS74、LIC 全系列。
 - LIC19--00--O-S (pink/magenta large scarf): currently a crop of the website screenshot.
