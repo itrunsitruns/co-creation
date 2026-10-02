@@ -53,6 +53,7 @@ def gallery(sku):
     _n=lambda m: int(_re.search(r"__(\d+)\.jpg$",m).group(1)) if _re.search(r"__(\d+)\.jpg$",m) else 0
     multi=sorted(glob.glob(os.path.join(A,key(sku)+"__*.jpg")),key=_n)  # natural sort: __2 before __10
     imgs=[os.path.basename(m) for m in multi] if multi else ([key(sku)+".jpg"] if os.path.exists(os.path.join(A,key(sku)+".jpg")) else [])
+    if os.path.exists(os.path.join(A,key(sku)+"__0.gif")): imgs=[key(sku)+"__0.gif"]+imgs  # 動態 GIF 放第一張
     if sku.startswith("PON") and os.path.exists(os.path.join(A,"PON__ring.jpg")): imgs=imgs+["PON__ring.jpg"]
     return ["assets/"+i for i in imgs]
 SECTIONS=[
@@ -76,7 +77,8 @@ def card(sku,color,mat,size):
     main=imgs[0]; data=esc(json.dumps(imgs)); title=f"{zh}・{czh}"
     rail=""
     if len(imgs)>1:
-        th=lambda im: ("assets/thumbs/"+os.path.basename(im)) if os.path.exists(os.path.join(A,"thumbs",os.path.basename(im))) else im
+        tn=lambda im: os.path.basename(im).replace(".gif",".jpg")  # GIF 的縮圖是靜態 jpg
+        th=lambda im: ("assets/thumbs/"+tn(im)) if os.path.exists(os.path.join(A,"thumbs",tn(im))) else im
         ts="".join(f'<img class="t{" active" if i==0 else ""}" data-i="{i}" loading="lazy" src="{th(im)}" data-full="{im}" alt="{esc(title)} {i+1}">' for i,im in enumerate(imgs))
         rail=f'<div class="rail">{ts}</div>'
     sold=sku in SOLD; link=SHOPEE.get(sku)
