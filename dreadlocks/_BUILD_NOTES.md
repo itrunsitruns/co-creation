@@ -66,6 +66,15 @@ Develop on a `claude/...` branch, then:
 - 手機上偶爾有縮圖顯示破圖（網路不穩／同時載入太多張，檔案本身正常）。index.html 的 <script> 開頭加了
   healImg()：載入失敗自動重試兩次，仍失敗就改用大圖；燈箱縮圖也套用。
 
+## 2026-10-02 更新：每款動態 GIF 放第一張
+- Drive「Dreadlocks」資料夾的 50 個 GIF（480×640，Φiaööna 實穿）存成 `assets/<key>__0.gif`，排在官方照前面；
+  右側縮圖用 `assets/thumbs/<key>__0.jpg`（GIF 第一格的 160px 靜態圖，不讓縮圖列載入整個 GIF）。
+- build_site.py：gallery() 若有 `__0.gif` 就放第一張；縮圖 .gif → 找同名 .jpg。
+- 檔名對不上、由畫面比對判斷的（待她確認）：CS45-Brown.gif→CS46_70_00（波浪紋棕，CS45 沒有棕色）、
+  CS48-Yellow.gif→CS48_41_00（Orange）、CS52.gif→CS52_27_00（Cream）、20261002_102851→CS53、
+  20261002_102911→CS56、20261002_104113→PON_103（Gold）。
+- 尚無 GIF：CS60、LIC20、CS52 Smoky Pink、PON 86/96/548。
+
 ## Pending
 - 還沒有蝦皮連結的 32 款：CS10、CS51、CS52、CS53、CS54、CS57～CS74、LIC 全系列。
 - LIC19--00--O-S (pink/magenta large scarf): currently a crop of the website screenshot.
