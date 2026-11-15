@@ -254,6 +254,18 @@
     line-height: 1.7;
   }
 
+  .whats-new {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 0 0 32px;
+  }
+  .whats-new h3 { color: var(--accent); font-size: 16px; margin-bottom: 10px; }
+  .whats-new ul { padding-left: 20px; }
+  .whats-new li { font-size: 14px; color: var(--text-dim); line-height: 1.7; margin-bottom: 8px; }
+  .whats-new li strong { color: var(--text); }
+
   .install-section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -403,12 +415,28 @@
 <section>
   <div class="section-title">核心功能</div>
   <div class="section-subtitle">Key Features</div>
+
+  <div class="whats-new">
+    <h3>✨ 最近更新 · What's new（2026 年 11 月）</h3>
+    <ul>
+      <li><strong>圓盤可以點了。</strong>點任何一天，看那天的階段、月相、斷食建議、懷孕風險，還有「這個階段在發生什麼」和「跟前一階段的差別」的科普說明。放著 20 秒會自己回到今天。<br>The dashboard disc is now interactive: tap any day for its phase, moon, fasting advice, pregnancy risk, and a short explainer of what is happening and how it differs from the phase before. It returns to today after 20 s.</li>
+      <li><strong>圓盤下方新增重要日期：</strong>排卵日、危險期、下次月經。<br>Key dates under the disc: ovulation, fertile window, next period.</li>
+      <li><strong>月經第一天改用內建日曆選擇。</strong>修正了 Android／Samsung 桌面 app 裡系統日期選單打不開的問題。<br>Period start date now uses a built-in calendar picker, fixing the Android/Samsung home-screen bug where the system date picker would not open.</li>
+      <li><strong>第二個週期之後圓盤也正確了。</strong>圓盤與排卵日現在以今天所在的週期計算。<br>The disc and ovulation date now follow the current cycle, not only the first one after the start date.</li>
+    </ul>
+  </div>
   <div class="features-grid">
     <div class="feature-card">
       <div class="feature-icon">📅</div>
       <div class="feature-title">週期追蹤</div>
       <div class="feature-title-en">Cycle Tracking</div>
-      <div class="feature-desc">輸入月經第一天，自動計算排卵日、危險期、安全期。<br>Enter your period start date — ovulation, fertile window, and safe days calculated automatically.</div>
+      <div class="feature-desc">用內建日曆點選月經第一天（不依賴手機系統的日期選單），自動計算排卵日、危險期、安全期。<br>Pick your period start date on the built-in calendar — ovulation, fertile window, and safe days calculated automatically.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪐</div>
+      <div class="feature-title">可點的月亮圓盤</div>
+      <div class="feature-title-en">Tappable Moon Disc</div>
+      <div class="feature-desc">儀表板圓盤一眼看完整個週期；點任何一格就看那天是什麼階段、身體在發生什麼、跟前一階段差在哪。排卵日、危險期、下次月經固定顯示在圓盤下方。<br>See the whole cycle at a glance; tap any wedge to learn what that day's phase is, what the body is doing, and how it differs from the phase before. Ovulation, fertile window and next period always shown below the disc.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon">⏱️</div>
@@ -468,7 +496,7 @@
       <div class="feature-icon">🔮</div>
       <div class="feature-title">每日塔羅</div>
       <div class="feature-title-en">Daily Tarot</div>
-      <div class="feature-desc">每天翻一張塔羅，正逆位的指引與牌義，給你今天的覺察。<br>Draw one tarot card a day — upright/reversed guidance for a moment of reflection.</div>
+      <div class="feature-desc">每天翻一張塔羅，同時看見這張牌的光面與陰影面，給你今天的覺察。<br>Draw one tarot card a day and see both its light and its shadow — a moment of reflection.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon">📖</div>
